@@ -6,6 +6,8 @@ import { Footer } from "@/components/Footer";
 import { Navigation } from "@/components/Navigation";
 import { ThemeProvider } from "@/components/themeProvider";
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/next"
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -66,6 +68,7 @@ export default function RootLayout({
             <Navigation />
             <main className="flex-1">
               {children}
+              <Analytics />
               <SpeedInsights />
             </main>
             <Footer />
