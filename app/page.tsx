@@ -247,13 +247,15 @@ function Card({ className, ...props }: React.ComponentProps<"div">) {
  *
  * @param {React.ComponentProps<"div">} props - Props to pass to the component
  * @returns {JSX.Element} - The card title component
- */
+
+
  * in a card. It is a flex container with column direction, and has
  * space between elements.
  *
  * @param {React.ComponentProps<"div">} props - Props to pass to the component
  * @returns {JSX.Element} - The card header component
  */
+
 function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div className={cn("flex flex-col space-y-1.5 p-6", className)} {...props} />
