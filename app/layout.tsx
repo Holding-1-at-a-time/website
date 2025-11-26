@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { ThemeProvider } from "@/components/theme-provider";
-import { Navigation } from "@/components/navigation";
-import { Footer } from "@/components/footer";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import { Footer } from "@/components/Footer";
+import { Navigation } from "@/components/Navigation";
+import { ThemeProvider } from "@/components/themeProvider";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -63,7 +64,10 @@ export default function RootLayout({
         >
           <div className="flex min-h-screen flex-col">
             <Navigation />
-            <main className="flex-1">{children}</main>
+            <main className="flex-1">
+              {children}
+              <SpeedInsights />
+            </main>
             <Footer />
           </div>
           <Toaster />

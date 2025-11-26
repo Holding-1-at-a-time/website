@@ -2,9 +2,9 @@
 
 import * as React from "react";
 import { Button } from "@/components/ui/button";
-import { Input, Label, Textarea } from "@/components/ui/form-elements";
-import { Toast } from "@/components/ui/sonner";
 import { services } from "@/lib/data";
+import { Label } from "@radix-ui/react-label";
+import { Input, Textarea } from "./formElements";
 
 
 function useToast(): { toast: any; } {

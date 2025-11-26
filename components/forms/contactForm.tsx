@@ -2,12 +2,21 @@
 
 import * as React from "react";
 import { Button } from "@/components/ui/button";
-import { Input, Label, Textarea } from "@/components/ui/form-elements";
-import { useToast } from "@/components/ui/use-toast";
 import { services } from "@/lib/data";
+import { Label } from "@radix-ui/react-label";
+import { Input, Textarea } from "./formElements";
+import { toast } from "sonner";
+
+
+/**
+ * A form component for sending messages to One Detail At A Time.
+ * Accepts name, email, phone, service, and message fields.
+ * Uses the `useToast` hook from `@/components/ui/toast` to display toast messages.
+ * Submits the form data to a Google Forms submission URL (replace with your own).
+ */
+
 
 export function ContactForm() {
-    const { toast } = useToast();
     const [isSubmitting, setIsSubmitting] = React.useState(false);
 
     async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -30,14 +39,14 @@ export function ContactForm() {
             // Simulate form submission - replace with actual Google Forms integration
             await new Promise(resolve => setTimeout(resolve, 1000));
 
-            toast({
+            showToast({
                 title: "Message sent!",
                 description: "We'll get back to you within 24 hours.",
             });
 
             (event.target as HTMLFormElement).reset();
         } catch (error) {
-            toast({
+            showToast({
                 title: "Error",
                 description: "Failed to send message. Please try again or call us directly.",
                 variant: "destructive",
@@ -115,4 +124,12 @@ export function ContactForm() {
             </Button>
         </form>
     );
+}
+
+function showToast(arg0: { title: string; description: string; variant?: "destructive" }) {
+    if (arg0.variant === "destructive") {
+        toast.error(arg0.title, { description: arg0.description });
+    } else {
+        toast.success(arg0.title, { description: arg0.description });
+    }
 }

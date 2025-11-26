@@ -1,10 +1,17 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ReviewCarousel } from "@/components/review-carousel";
 import { services } from "@/lib/data";
 import { ArrowRight, CheckCircle, Phone, Star } from "lucide-react";
+import { cn } from "@/lib/utils";
 
+
+/**
+ * HomePage component
+ *
+ * Primary entry point of the application
+ *
+ * Contains hero, services, reviews, and cta sections
+ */
 export default function HomePage() {
   const primaryServices = services.filter(s => s.category === 'primary').slice(0, 6);
 
@@ -158,6 +165,11 @@ export default function HomePage() {
   );
 }
 
+/**
+ * A component that renders a carousel of customer reviews.
+ *
+ * @returns {JSX.Element} A JSX element containing a carousel of customer reviews.
+ */
 function ReviewCarousel() {
   const reviews = [
     {
@@ -206,21 +218,51 @@ function ReviewCarousel() {
       </Carousel>
     </div>
   );
-} CardHeader, CardTitle, CardDescription, CardContent, CardFooter, CardAction };
+}
 
+/**
+ * Card component
+ *
+ * A rounded card component with a border and shadow
+ *
+ * @param {React.ComponentProps<"div">} props - Props to pass to the component
+ * @returns {JSX.Element} - The card component
+ */
 function Card({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div className={cn("rounded-lg border bg-card text-card-foreground shadow-sm", className)} {...props} />
   );
 }
+
+/**
+ * A card header component
+ *
+ * A card header component that displays a heading and possible other elements
+/**
+ * A card title component
+ *
+ * A card title component that displays a heading in a card.
+ * It is a h3 element with font size of 2xl, font weight of
+ * semi-bold, leading of none, and letter spacing of normal.
+ *
+ * @param {React.ComponentProps<"div">} props - Props to pass to the component
+ * @returns {JSX.Element} - The card title component
+ */
+ * in a card. It is a flex container with column direction, and has
+ * space between elements.
+ *
+ * @param {React.ComponentProps<"div">} props - Props to pass to the component
+ * @returns {JSX.Element} - The card header component
+ */
 function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div className={cn("flex flex-col space-y-1.5 p-6", className)} {...props} />
   );
 }
+
 function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
   return (
-   <h3 className={cn("text-2xl font-semibold leading-none tracking-tight", className)} {...props} />
+    <h3 className={cn("text-2xl font-semibold leading-none tracking-tight", className)} {...props} />
   );
 }
 function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
@@ -235,7 +277,7 @@ function CardContent({ className, ...props }: React.ComponentProps<"div">) {
 }
 function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
-   <div className={cn("flex items-center p-6 pt-0", className)} {...props} />
+    <div className={cn("flex items-center p-6 pt-0", className)} {...props} />
   );
 }
 function CardAction({ className, ...props }: React.ComponentProps<"div">) {
@@ -245,6 +287,30 @@ function CardAction({ className, ...props }: React.ComponentProps<"div">) {
 }
 function Carousel({ className, ...props }: React.ComponentProps<"div">) {
   return (
-   <div className={cn("relative", className)} {...props} />
+    <div className={cn("relative", className)} {...props} />
+  );
+}
+function CarouselContent({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div className={cn("overflow-hidden", className)} {...props} />
+  );
+}
+function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div className={cn("flex-[0_0_100%] min-w-0", className)} {...props} />
+  );
+}
+function CarouselPrevious({ className, ...props }: React.ComponentProps<"button">) {
+  return (
+    <button className={cn("absolute left-0 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-md", className)} {...props}>
+      <ArrowRight className="h-5 w-5 rotate-180" />
+    </button>
+  );
+}
+function CarouselNext({ className, ...props }: React.ComponentProps<"button">) {
+  return (
+    <button className={cn("absolute right-0 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-md", className)} {...props}>
+      <ArrowRight className="h-5 w-5" />
+    </button>
   );
 }
