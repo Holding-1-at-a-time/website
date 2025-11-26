@@ -5,57 +5,15 @@ import { Button } from "@/components/ui/button";
 import { services } from "@/lib/data";
 import { Label } from "@radix-ui/react-label";
 import { Input, Textarea } from "./formElements";
+import { toast } from "sonner";
 
-
-function useToast(): { toast: any; } {
-    // Minimal toast implementation for client-side usage.
-    // Returns an object with a `toast` function that accepts an options object
-    // with optional title, description, and variant properties.
-    const toast = React.useCallback((opts: { title?: string; description?: string; variant?: string } = {}) => {
-        const title = opts.title ?? "";
-        const description = opts.description ?? "";
-        const variant = opts.variant ?? "";
-
-        if (typeof window !== "undefined" && document && document.body) {
-            const message = title + (description ? "\n" + description : "");
-
-            const el = document.createElement("div");
-            el.textContent = message;
-            Object.assign(el.style, {
-                position: "fixed",
-                right: "20px",
-                top: "20px",
-                maxWidth: "320px",
-                whiteSpace: "pre-wrap",
-                background: variant === "destructive" ? "#ef4444" : "#111827",
-                color: "#fff",
-                padding: "12px 16px",
-                borderRadius: "8px",
-                zIndex: "9999",
-                boxShadow: "0 6px 18px rgba(0,0,0,0.2)",
-                transition: "opacity 0.3s ease",
-            });
-
-            document.body.appendChild(el);
-
-            // auto remove after 3s
-            setTimeout(() => {
-                el.style.opacity = "0";
-                setTimeout(() => el.remove(), 300);
-            }, 3000);
-        } else {
-            // Fallback to console when document isn't available
-            // eslint-disable-next-line no-console
-            console.log("Toast:", { title, description, variant });
-        }
-    }, []);
-
-    return { toast };
-}
-
+/**
+ * A form component for booking appointments with One Detail At A Time.
+ * Accepts name, email, phone, service, date, time, vehicle type, and message fields.
+ * Uses modern Sonner toast notifications for user feedback.
+ */
 
 export function BookingForm() {
-    const { toast } = useToast();
     const [isSubmitting, setIsSubmitting] = React.useState(false);
 
     async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -81,17 +39,14 @@ export function BookingForm() {
             // Simulate form submission - replace with actual Google Calendar/Forms integration
             await new Promise(resolve => setTimeout(resolve, 1000));
 
-            toast({
-                title: "Booking submitted!",
+            toast.success("Booking submitted!", {
                 description: "We'll confirm your appointment within 2 hours.",
             });
 
             (event.target as HTMLFormElement).reset();
         } catch (error) {
-            toast({
-                title: "Error",
+            toast.error("Error", {
                 description: "Failed to submit booking. Please try again or call us directly.",
-                variant: "destructive",
             });
         } finally {
             setIsSubmitting(false);
