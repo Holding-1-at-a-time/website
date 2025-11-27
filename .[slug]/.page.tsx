@@ -3,36 +3,61 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { getServiceBySlug } from "@/lib/data";
+import { getServiceBySlug, services } from "@/lib/data";
 import { ArrowRight, CheckCircle, Clock, DollarSign, MapPin, Phone } from "lucide-react";
 import { notFound } from "next/navigation";
+import type { Service } from "@/types/index";
 
-const service = getServiceBySlug("clay-bar-treatment");
-
-if (!service) {
-    notFound();
+interface Props {
+    params: {
+        slug: string;
+    };
 }
 
-export const metadata: Metadata = {
-    title: service.title,
-    description: service.metaDescription,
-    openGraph: {
+export async function generateStaticParams() {
+    return services.map((service) => ({
+        slug: service.slug,
+    }));
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const service = getServiceBySlug(params.slug);
+    
+    if (!service) {
+        return {
+            title: "Service Not Found - One Detail At A Time",
+            description: "The requested service could not be found.",
+        };
+    }
+
+    return {
         title: service.title,
         description: service.metaDescription,
-        type: "website",
-        url: `https://1detailatatime.com/services/clay-bar-treatment`,
-    },
-    alternates: {
-        canonical: `https://1detailatatime.com/services/clay-bar-treatment`,
-    },
-};
+        openGraph: {
+            title: service.title,
+            description: service.metaDescription,
+            type: "website",
+            url: `https://1detailatatime.com/services/${service.slug}`,
+        },
+        alternates: {
+            canonical: `https://1detailatatime.com/services/${service.slug}`,
+        },
+    };
+}
 
-export default function ServicePage() {
+export default function ServicePage({ params }: Props) {
+    const service = getServiceBySlug(params.slug);
+    
+    if (!service) {
+        notFound();
+        return null;
+    }
+
     const jsonLd = {
         "@context": "https://schema.org",
         "@type": "Service",
-        "name": service?.name,
-        "description": service?.description,
+        "name": service.name,
+        "description": service.description,
         "provider": {
             "@type": "LocalBusiness",
             "name": "One Detail At A Time",
@@ -77,6 +102,11 @@ export default function ServicePage() {
             "priceCurrency": "USD"
         }
     };
+
+    // Get related services (same category, excluding current service)
+    const relatedServices = services
+        .filter(s => s.category === service.category && s.id !== service.id)
+        .slice(0, 3);
 
     return (
         <>
@@ -190,6 +220,34 @@ export default function ServicePage() {
                         </div>
                     </div>
                 </section>
+
+                {/* Related Services */}
+                {relatedServices.length > 0 && (
+                    <section className="py-16 bg-muted/50">
+                        <div className="container">
+                            <h2 className="text-3xl font-bold mb-8 text-center">Other Services You Might Like</h2>
+                            <div className="grid gap-6 md:grid-cols-3">
+                                {relatedServices.map((relatedService) => (
+                                    <Card key={relatedService.id}>
+                                        <CardContent className="p-6">
+                                            <h3 className="text-xl font-semibold mb-2">{relatedService.name}</h3>
+                                            <p className="text-muted-foreground mb-4">{relatedService.description}</p>
+                                            <div className="flex justify-between items-center mb-4">
+                                                <span className="font-semibold text-primary">{relatedService.price}</span>
+                                                <span className="text-sm text-muted-foreground">{relatedService.duration}</span>
+                                            </div>
+                                            <Button variant="outline" size="sm" asChild className="w-full">
+                                                <Link href={`/services/${relatedService.slug}`}>
+                                                    Learn More
+                                                </Link>
+                                            </Button>
+                                        </CardContent>
+                                    </Card>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+                )}
 
                 <section className="py-16 bg-muted/50">
                     <div className="container">
