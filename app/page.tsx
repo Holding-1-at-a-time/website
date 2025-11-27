@@ -226,45 +226,12 @@ function ReviewCarousel() {
   );
 }
 
-/**
- * Card component
- *
- * A rounded card component with a border and shadow
- *
- * @param {React.ComponentProps<"div">} props - Props to pass to the component
- * @returns {JSX.Element} - The card component
- */
 
 function Card({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div className={cn("rounded-lg border bg-card text-card-foreground shadow-sm", className)} {...props} />
   );
 }
-
-
-/**
- * A card header component.
- *
- * A container component with a flexbox layout and a padding of 1.5rem.
- * It is intended to be used as a header for the Card component.
- *
- * @typedef {React.ComponentProps<"div">} CardHeaderProps
- * @prop {string} className - Additional CSS classes to apply to the component
-
- * A card title component.
- *
- * A heading component with a font size of 2xl, font weight of bold, and line height of 1.25.
- * It is intended to be used as a title for the Card component.
- *
- * @param {string} className - Additional CSS classes to apply to the component
- * It is intended to be used as a title for the Card component.
- *
- */
- * @param {React.ComponentProps<"div">} props - Additional props to pass to the component
- */
- * @prop {React.ComponentProps<"div">} props - Additional props to pass to the component
- */
-
 
 function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
