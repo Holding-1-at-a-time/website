@@ -37,8 +37,42 @@ export function ReviewCarousel() {
         emblaApi.on("reInit", onSelect);
     }, [emblaApi, onSelect]);
 
+    const reviewSchema = reviews.map(review => ({
+        "@context": "https://schema.org",
+        "@type": "Review",
+        "author": {
+            "@type": "Person",
+            "name": review.name,
+        },
+        "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": review.rating.toString(),
+            "bestRating": "5",
+        },
+        "reviewBody": review.comment,
+        "datePublished": review.date,
+        "itemReviewed": {
+            "@type": "LocalBusiness",
+            "name": "One Detail At A Time",
+            "image": "https://1detailatatime.com/logo.png",
+            "telephone": "(726) 207-1007",
+            "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "11692 Bricken Circle",
+                "addressLocality": "San Antonio",
+                "addressRegion": "TX",
+                "postalCode": "78233",
+                "addressCountry": "US"
+            }
+        }
+    }));
+
     return (
         <div className="relative">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema) }}
+            />
             <div className="overflow-hidden" ref={emblaRef}>
                 <div className="flex gap-4">
                     {reviews.map((review, index) => {

@@ -56,9 +56,9 @@ export default function BookingPage() {
                   <div className="flex items-start gap-3">
                     <CheckCircle className="h-5 w-5 text-primary mt-1" />
                     <div>
-                      <p className="font-medium">Mobile Service</p>
+                      <p className="font-medium">Detailing Service</p>
                       <p className="text-sm text-muted-foreground">
-                        We come to your location in San Antonio
+                        You will drop your vehicle at our designated location in San Antonio, TX
                       </p>
                     </div>
                   </div>

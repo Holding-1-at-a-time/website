@@ -147,7 +147,6 @@ export default function ContactPage() {
                                             <h3 className="font-semibold text-lg">Service Area</h3>
                                             <p className="text-muted-foreground">San Antonio, TX & Surrounding Areas</p>
                                             <p className="text-sm text-muted-foreground">
-                                                Mobile service - we come to you! Serving Stone Oak, Alamo Heights, North Side, and all San Antonio areas.
                                             </p>
                                         </div>
                                     </div>
@@ -159,9 +158,8 @@ export default function ContactPage() {
                                         <div>
                                             <h3 className="font-semibold text-lg">Business Hours</h3>
                                             <div className="text-muted-foreground space-y-1">
-                                                <p>Monday - Friday: 8:00 AM - 6:00 PM</p>
-                                                <p>Saturday: 9:00 AM - 5:00 PM</p>
-                                                <p>Sunday: 10:00 AM - 4:00 PM</p>
+                                                <p>Monday - Cosed</p>
+                                                <p>Tuesday - Sunday: 7:00 AM - 10:00 PM</p>
                                             </div>
                                             <p className="text-sm text-muted-foreground">
                                                 Emergency service available by appointment

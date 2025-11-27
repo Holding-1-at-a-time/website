@@ -2,7 +2,21 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { services } from "@/lib/data";
 import { ArrowRight, CheckCircle, Phone, Star } from "lucide-react";
-import { cn } from "@/lib/utils";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { ReviewCarousel } from "@/components/reviewCarousel";
 
 
 /**
