@@ -3,6 +3,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { CheckCircle, Heart, Shield, Star, Users } from "lucide-react";
+import Image from "next/image";
+import studioImage from "@/lib/One Detail At A Time LLC Pro & Private Auto Detailing Studio.jpg";
 
 export const metadata: Metadata = {
   title: "About Us | One Detail At A Time - IDA Certified Auto Detailing",
