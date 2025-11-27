@@ -50,6 +50,7 @@ export default function ServicePage({ params }: Props) {
     
     if (!service) {
         notFound();
+        return null;
     }
 
     const jsonLd = {
