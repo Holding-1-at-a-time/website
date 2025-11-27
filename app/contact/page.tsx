@@ -35,8 +35,9 @@ export default function ContactPage() {
             "addressCountry": "US"
         },
         "openingHours": [
-            "Mo Closed",
-            "Tu-Su 07:00-22:00",
+            "Mo-Fr 08:00-18:00",
+            "Sa 09:00-17:00",
+            "Su 10:00-16:00",
         ],
         "priceRange": "$39-$399+"
     };
@@ -139,8 +140,9 @@ export default function ContactPage() {
                                         <div>
                                             <h3 className="font-semibold text-lg">Business Hours</h3>
                                             <div className="text-muted-foreground space-y-1">
-                                                <p>Monday - Closed</p>
-                                                <p>Tuesday - Sunday: 7:00 AM - 10:00 PM</p>
+                                                <p>Monday - Friday: 8:00 AM - 6:00 PM</p>
+                                                <p>Saturday: 9:00 AM - 5:00 PM</p>
+                                                <p>Sunday: 10:00 AM - 4:00 PM</p>
                                             </div>
                                             <p className="text-sm text-muted-foreground">
                                                 Emergency service available by appointment
