@@ -7,15 +7,6 @@ import { getServiceBySlug, services } from "@/lib/data";
 import { ArrowRight, CheckCircle, Clock, DollarSign, MapPin, Phone } from "lucide-react";
 import { notFound } from "next/navigation";
 
-//** */ Generate static paths for all services *//
-//export async function generateStaticParams() {
-//  return services.map((service) => ({
-//    slug: service.slug,
-//  }));
-//}
-//** */ Get service by slug *//
-
-
 interface PageProps {
   params: {
     slug: string;
@@ -28,6 +19,7 @@ interface PageProps {
  * @param {PageProps} props - props passed to the page component.
  * @returns {Promise<Metadata>} - a promise that resolves to the metadata for the page.
  */
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = params;
   const service = getServiceBySlug(slug);

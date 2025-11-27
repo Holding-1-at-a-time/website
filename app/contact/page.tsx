@@ -35,9 +35,8 @@ export default function ContactPage() {
             "addressCountry": "US"
         },
         "openingHours": [
-            "Mo-Fr 08:00-18:00",
-            "Sa 09:00-17:00",
-            "Su 10:00-16:00",
+            "Mo closed",
+            "Tu-Su 07:00-22:00"
         ],
         "priceRange": "$39-$399+"
     };
@@ -58,7 +57,7 @@ export default function ContactPage() {
                                 Get Your Free Quote Today
                             </h1>
                             <p className="text-lg text-muted-foreground">
-                                Ready to give your vehicle the professional care it deserves? 
+                                Ready to give your vehicle the professional care it deserves?
                                 Contact us for your free quote and experience IDA certified auto detailing in San Antonio.
                             </p>
                         </div>
@@ -89,7 +88,7 @@ export default function ContactPage() {
                                 <div>
                                     <h2 className="text-3xl font-bold mb-6">Contact Information</h2>
                                     <p className="text-muted-foreground mb-8">
-                                        We're here to help with all your auto detailing needs. 
+                                        We're here to help with all your auto detailing needs.
                                         Contact us today for professional service throughout San Antonio and surrounding areas.
                                     </p>
                                 </div>
@@ -140,9 +139,8 @@ export default function ContactPage() {
                                         <div>
                                             <h3 className="font-semibold text-lg">Business Hours</h3>
                                             <div className="text-muted-foreground space-y-1">
-                                                <p>Monday - Friday: 8:00 AM - 6:00 PM</p>
-                                                <p>Saturday: 9:00 AM - 5:00 PM</p>
-                                                <p>Sunday: 10:00 AM - 4:00 PM</p>
+                                                <p>Monday: Closed</p>
+                                                <p>Tuesday - Sunday: 7:00 AM - 10:00 PM</p>
                                             </div>
                                             <p className="text-sm text-muted-foreground">
                                                 Emergency service available by appointment
@@ -169,7 +167,7 @@ export default function ContactPage() {
                                 <CardContent className="p-6">
                                     <h3 className="font-semibold mb-2">How quickly can you respond to my request?</h3>
                                     <p className="text-muted-foreground">
-                                        We typically respond to all inquiries within 2-4 hours during business hours, 
+                                        We typically respond to all inquiries within 2-4 hours during business hours,
                                         and within 24 hours on weekends or holidays.
                                     </p>
                                 </CardContent>
@@ -186,7 +184,7 @@ export default function ContactPage() {
                                 <CardContent className="p-6">
                                     <h3 className="font-semibold mb-2">What's included in your free quote?</h3>
                                     <p className="text-muted-foreground">
-                                        Our free quote includes detailed pricing based on your vehicle type, 
+                                        Our free quote includes detailed pricing based on your vehicle type,
                                         service needs, and current condition, plus service time estimates.
                                     </p>
                                 </CardContent>
@@ -195,7 +193,7 @@ export default function ContactPage() {
                                 <CardContent className="p-6">
                                     <h3 className="font-semibold mb-2">Are you licensed and insured?</h3>
                                     <p className="text-muted-foreground">
-                                        Yes, we are fully licensed, insured, and IDA certified. 
+                                        Yes, we are fully licensed, insured, and IDA certified.
                                         Your vehicle and property are fully protected during our service.
                                     </p>
                                 </CardContent>

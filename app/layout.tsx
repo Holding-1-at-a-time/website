@@ -56,9 +56,106 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // LocalBusiness Schema for site-wide SEO
+  const localBusinessSchema = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "@id": "https://1detailatatime.com/#business",
+    "name": "One Detail At A Time",
+    "alternateName": "One Detail At A Time LLC",
+    "url": "https://1detailatatime.com",
+    "logo": "https://1detailatatime.com/logo.png",
+    "image": "https://1detailatatime.com/logo.png",
+    "description": "IDA certified auto detailing studio in San Antonio, TX. Expert car care, paint protection, and interior cleaning services. Serving Stone Oak, Alamo Heights, North Side and all SA areas.",
+    "telephone": "(726) 207-1007",
+    "email": "rromerojr1@gmail.com",
+    "priceRange": "$39-$399+",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "11692 Bricken Circle",
+      "addressLocality": "San Antonio",
+      "addressRegion": "TX",
+      "postalCode": "78233",
+      "addressCountry": "US"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 29.4241,
+      "longitude": -98.4936
+    },
+    "areaServed": [
+      {
+        "@type": "City",
+        "name": "San Antonio",
+        "addressRegion": "TX",
+        "addressCountry": "US"
+      },
+      "Stone Oak",
+      "Alamo Heights", 
+      "North Side",
+      "Medical Center",
+      "Downtown"
+    ],
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday"],
+        "closed": true
+      },
+      {
+        "@type": "OpeningHoursSpecification", 
+        "dayOfWeek": ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+        "opens": "07:00",
+        "closes": "22:00"
+      }
+    ],
+    "serviceType": [
+      "Auto Detailing",
+      "Car Wash Service", 
+      "Paint Protection",
+      "Interior Cleaning",
+      "Paint Correction",
+      "Ceramic Coating"
+    ],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Auto Detailing Services",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Full Auto Detailing",
+            "description": "Complete interior and exterior auto detailing service"
+          }
+        },
+        {
+          "@type": "Offer", 
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Paint Correction",
+            "description": "Professional paint correction and protection services"
+          }
+        }
+      ]
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5.0",
+      "reviewCount": "25"
+    },
+    "servesCuisine": "Auto Detailing",
+    "paymentAccepted": ["Cash", "Credit Card", "Debit Card"],
+    "currenciesAccepted": "USD"
+  };
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+        />
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
