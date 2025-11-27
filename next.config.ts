@@ -80,15 +80,18 @@ const nextConfig: NextConfig = {
   // Performance Optimizations
   compress: true,
   poweredByHeader: false,
-  
   // Experimental optimizations
   experimental: {
     optimizeCss: true,
     optimizePackageImports: ['lucide-react', '@radix-ui/react-select', '@radix-ui/react-separator'],
   },
 
+  // Empty Turbopack configuration to resolve build conflicts
+  turbopack: {},
+
   // Bundle analyzer for optimization
   webpack: (config, { dev, isServer }) => {
+
     if (!dev && !isServer) {
       config.optimization = {
         ...config.optimization,
