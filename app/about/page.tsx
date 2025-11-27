@@ -78,9 +78,9 @@ export default function AboutPage() {
             <Card>
               <CardContent className="p-6 text-center space-y-4">
                 <Users className="h-12 w-12 text-primary mx-auto" />
-                <h3 className="text-xl font-semibold">Mobile Service</h3>
+                <h3 className="text-xl font-semibold">Valet Service</h3>
                 <p className="text-sm text-muted-foreground">
-                  We come to you throughout San Antonio areas
+                  We offer a valet service for an added cost of $50. We will pick up and drop off your vehicle at any location and destination stated by you.
                 </p>
               </CardContent>
             </Card>

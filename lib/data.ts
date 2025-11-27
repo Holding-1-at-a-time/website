@@ -7,8 +7,8 @@ export const services: Service[] = [
         slug: "auto-detailing",
         category: "primary",
         title: "IDA Certified Auto Detailing in San Antonio, TX | One Detail At A Time",
-        description: "Premium Auto detailing services for San Antonio residents. Expert car detailing, paint protection & interior deep cleanse. Licensed, insured & certified pro",
-        metaDescription: "Premium IDA certified auto detailing in San Antonio, TX. Expert car care including paint protection, interior deep cleaning, and ceramic coating. Serving Stone Oak, Alamo Heights, and North Side SA. Free quotes!",
+        description: "Premium Auto detailing services in San Antonio. Expert car detailing, paint protection & interior deep cleanse. Licensed, insured & certified pro. Drop off your vehicle at our studio or opt for our valet service.",
+        metaDescription: "Premium IDA certified auto detailing in San Antonio, TX. Expert car care including paint protection, interior deep cleaning, and ceramic coating. Drop off at our studio or ask about our valet service. Free quotes!",
         features: [
             "Complete exterior hand wash and dry",
             "Interior vacuuming and shampooing",
@@ -19,7 +19,7 @@ export const services: Service[] = [
         ],
         benefits: [
             "IDA certified professional detailers",
-            "Mobile service - we come to you",
+            "Valet service available for an additional $50",
             "Eco-friendly products",
             "Licensed and insured",
             "Satisfaction guaranteed"
@@ -55,8 +55,8 @@ export const services: Service[] = [
         slug: "auto-interior-vacuuming",
         category: "primary",
         title: "IDA Certified Auto Interior Vacuuming San Antonio, TX | One Detail At A Time",
-        description: "Professional car vacuuming for San Antonio vehicles. Expert carpet cleaning, upholstery vacuuming & debris removal. Serving Stone Oak, Alamo Heights, North Side & all SA areas. Free quotes today!",
-        metaDescription: "Expert auto interior vacuuming service in San Antonio. Deep carpet cleaning, upholstery care, and complete debris removal. Mobile service available throughout San Antonio, TX. IDA certified professionals.",
+        description: "Professional car vacuuming in San Antonio. Expert carpet cleaning, upholstery vacuuming & debris removal. Drop off your vehicle at our studio or opt for our valet service. Free quotes today!",
+        metaDescription: "Expert auto interior vacuuming service in San Antonio. Deep carpet cleaning, upholstery care, and complete debris removal. Valet service available. Drop off at our studio. IDA certified professionals.",
         features: [
             "High-powered vacuum system",
             "Carpet and upholstery deep cleaning",
@@ -66,6 +66,7 @@ export const services: Service[] = [
             "Crevice tool detailing"
         ],
         benefits: [
+            "Valet service available for an additional $50",
             "Removes embedded dirt and allergens",
             "Improves air quality",
             "Extends interior lifespan",
@@ -103,8 +104,8 @@ export const services: Service[] = [
         slug: "car-waxing",
         category: "primary",
         title: "IDA Certified Car Waxing & Auto Detailing San Antonio, TX | One Detail At A Time",
-        description: "Professional mobile waxing services for San Antonio vehicles. Expert hand wax, paint protection & shine restoration. Serving Stone Oak, Alamo Heights, North Side & all SA areas. Licensed & insured. Free quotes today!",
-        metaDescription: "Premium car waxing service in San Antonio, TX. Expert hand wax application, paint protection, and shine restoration. Mobile service throughout Stone Oak, Alamo Heights, and all SA areas. IDA certified.",
+        description: "Professional waxing services in San Antonio. Expert hand wax, paint protection & shine restoration. Drop off your vehicle at our studio or opt for our valet service. Licensed & insured. Free quotes today!",
+        metaDescription: "Premium car waxing service in San Antonio, TX. Expert hand wax application, paint protection, and shine restoration. Valet service available. Drop off at our studio. IDA certified.",
         features: [
             "Premium carnauba wax application",
             "Paint decontamination before waxing",
@@ -114,6 +115,7 @@ export const services: Service[] = [
             "3-4 month protection"
         ],
         benefits: [
+            "Valet service available for an additional $50",
             "Deep, wet-look shine",
             "Protects against UV damage",
             "Repels water and contaminants",
@@ -151,8 +153,8 @@ export const services: Service[] = [
         slug: "clay-bar-treatment",
         category: "primary",
         title: "IDA Certified Clay Bar Treatment San Antonio, TX | One Detail At A Time",
-        description: "Professional clay bar treatment for San Antonio vehicles. Expert contaminant removal, smooth finish & paint prep. Serving Stone Oak, Alamo Heights, North Side & all SA areas. Licensed & insured. Free quotes!",
-        metaDescription: "Expert clay bar treatment in San Antonio, TX. Remove embedded contaminants, overspray, and bonded particles. Smooth glass-like finish. Mobile service available. IDA certified detailers.",
+        description: "Professional clay bar treatment in San Antonio. Expert contaminant removal, smooth finish & paint prep. Drop off your vehicle at our studio or opt for our valet service. Licensed & insured. Free quotes!",
+        metaDescription: "Expert clay bar treatment in San Antonio, TX. Remove embedded contaminants, overspray, and bonded particles. Smooth glass-like finish. Valet service available. Drop off at our studio. IDA certified detailers.",
         features: [
             "Premium clay bar system",
             "Removes bonded contaminants",
@@ -162,6 +164,7 @@ export const services: Service[] = [
             "Paint correction prep"
         ],
         benefits: [
+            "Valet service available for an additional $50",
             "Restores smooth paint surface",
             "Removes what washing can't",
             "Prepares for wax or coating",
@@ -199,8 +202,8 @@ export const services: Service[] = [
         slug: "engine-detailing",
         category: "primary",
         title: "IDA Certified Engine Detailing San Antonio, TX | One Detail At A Time",
-        description: "Professional engine bay cleaning & detailing for San Antonio vehicles. Expert degreasing, steam cleaning & protection. Serving Stone Oak, Alamo Heights, North Side & all SA areas. Mobile service available. Free quotes!",
-        metaDescription: "Expert engine detailing in San Antonio, TX. Safe degreasing, steam cleaning, and protective dressing. Mobile service for all San Antonio areas. IDA certified professionals.",
+        description: "Professional engine bay cleaning & detailing in San Antonio. Expert degreasing, steam cleaning & protection. Drop off your vehicle at our studio or opt for our valet service. Free quotes!",
+        metaDescription: "Expert engine detailing in San Antonio, TX. Safe degreasing, steam cleaning, and protective dressing. Valet service available. Drop off at our studio. IDA certified professionals.",
         features: [
             "Safe degreasing process",
             "Steam cleaning technology",
@@ -210,6 +213,7 @@ export const services: Service[] = [
             "Plastic and rubber restoration"
         ],
         benefits: [
+            "Valet service available for an additional $50",
             "Easier leak detection",
             "Better engine cooling",
             "Prevents corrosion",
@@ -247,8 +251,8 @@ export const services: Service[] = [
         slug: "full-body-wash",
         category: "primary",
         title: "IDA Certified Full Body Wash & Auto Detailing San Antonio, TX | One Detail At A Time",
-        description: "Professional exterior car washing for San Antonio vehicles. Expert hand wash, foam bath & spot-free rinse. Serving Stone Oak, Alamo Heights, North Side & all SA areas. Mobile service. Free quotes today!",
-        metaDescription: "Premium full body wash service in San Antonio, TX. Hand wash, foam bath, spot-free rinse, and tire shine. Mobile detailing throughout San Antonio. IDA certified professionals.",
+        description: "Professional exterior car washing in San Antonio. Expert hand wash, foam bath & spot-free rinse. Drop off your vehicle at our studio or opt for our valet service. Free quotes today!",
+        metaDescription: "Premium full body wash service in San Antonio, TX. Hand wash, foam bath, spot-free rinse, and tire shine. Valet detailing available. Drop off at our studio. IDA certified professionals.",
         features: [
             "pH-balanced car shampoo",
             "Two-bucket wash method",
@@ -258,6 +262,7 @@ export const services: Service[] = [
             "Microfiber towel dry"
         ],
         benefits: [
+            "Valet service available for an additional $50",
             "Scratch-free washing technique",
             "Removes dirt safely",
             "Prevents water spots",
@@ -295,8 +300,8 @@ export const services: Service[] = [
         slug: "headlight-polishing",
         category: "primary",
         title: "IDA Certified Headlight Restoration San Antonio, TX | One Detail At A Time",
-        description: "Professional headlight polishing & cleaning for San Antonio vehicles. Expert oxidation removal, UV protection & clarity restoration. Serving Stone Oak, Alamo Heights, North Side & all SA areas. Free quotes!",
-        metaDescription: "Expert headlight restoration in San Antonio, TX. Remove oxidation and yellowing, restore clarity, apply UV protection. Mobile service available. IDA certified detailers.",
+        description: "Professional headlight polishing & cleaning in San Antonio. Expert oxidation removal, UV protection & clarity restoration. Drop off your vehicle at our studio or opt for our valet service. Free quotes!",
+        metaDescription: "Expert headlight restoration in San Antonio, TX. Remove oxidation and yellowing, restore clarity, apply UV protection. Valet service available. Drop off at our studio. IDA certified detailers.",
         features: [
             "Oxidation removal",
             "Multi-stage polishing",
@@ -306,6 +311,7 @@ export const services: Service[] = [
             "Clear coat application"
         ],
         benefits: [
+            "Valet service available for an additional $50",
             "Dramatically improves visibility",
             "Safer night driving",
             "Restores like-new appearance",
@@ -343,8 +349,8 @@ export const services: Service[] = [
         slug: "interior-scenting",
         category: "primary",
         title: "IDA Certified Interior Scenting & Auto Detailing San Antonio, TX | One Detail At A Time",
-        description: "Professional car interior freshening for San Antonio vehicles. Expert odor elimination, air freshening & scent application. Serving Stone Oak, Alamo Heights, North Side & all SA areas. Free quotes!",
-        metaDescription: "Expert interior scenting service in San Antonio, TX. Eliminate odors, freshen air, and apply long-lasting fragrances. Mobile detailing throughout San Antonio. IDA certified.",
+        description: "Professional car interior freshening in San Antonio. Expert odor elimination, air freshening & scent application. Drop off your vehicle at our studio or opt for our valet service. Free quotes!",
+        metaDescription: "Expert interior scenting service in San Antonio, TX. Eliminate odors, freshen air, and apply long-lasting fragrances. Valet detailing available. Drop off at our studio. IDA certified.",
         features: [
             "Odor elimination treatment",
             "Ozone treatment option",
@@ -354,6 +360,7 @@ export const services: Service[] = [
             "Long-lasting scents"
         ],
         benefits: [
+            "Valet service available for an additional $50",
             "Removes stubborn odors",
             "Pleasant driving experience",
             "Multiple scent options",
@@ -391,8 +398,8 @@ export const services: Service[] = [
         slug: "paint-repair",
         category: "primary",
         title: "IDA Certified Paint Correction & Repair San Antonio, TX | One Detail At A Time",
-        description: "Professional paint repair for San Antonio vehicles. Expert scratch removal, chip repair & paint restoration. Serving Stone Oak, Alamo Heights, North Side & all SA areas. Free quotes today!",
-        metaDescription: "Expert paint correction and repair in San Antonio, TX. Remove scratches, swirls, oxidation, and chips. Restore factory finish. Mobile service available. IDA certified professionals.",
+        description: "Professional paint repair in San Antonio. Expert scratch removal, chip repair & paint restoration. Drop off your vehicle at our studio or opt for our valet service. Free quotes today!",
+        metaDescription: "Expert paint correction and repair in San Antonio, TX. Remove scratches, swirls, oxidation, and chips. Restore factory finish. Valet service available. Drop off at our studio. IDA certified professionals.",
         features: [
             "Multi-stage paint correction",
             "Scratch and swirl removal",
@@ -402,6 +409,7 @@ export const services: Service[] = [
             "Paint sealant application"
         ],
         benefits: [
+            "Valet service available for an additional $50",
             "Restores paint depth and gloss",
             "Removes years of damage",
             "Professional results",
@@ -439,8 +447,8 @@ export const services: Service[] = [
         slug: "seat-shampooing",
         category: "primary",
         title: "IDA Certified Seat Shampooing & Interior Detailing San Antonio, TX | One Detail At A Time",
-        description: "Professional upholstery cleaning for San Antonio vehicles. Expert stain removal, deep cleaning & fabric protection. Serving Stone Oak, Alamo Heights, North Side & all SA areas.",
-        metaDescription: "Expert seat shampooing and upholstery cleaning in San Antonio, TX. Remove stains, odors, and deep-set dirt. Fabric protection available. Mobile service. IDA certified.",
+        description: "Professional upholstery cleaning in San Antonio. Expert stain removal, deep cleaning & fabric protection. Drop off your vehicle at our studio or opt for our valet service.",
+        metaDescription: "Expert seat shampooing and upholstery cleaning in San Antonio, TX. Remove stains, odors, and deep-set dirt. Fabric protection available. Valet service available. Drop off at our studio. IDA certified.",
         features: [
             "Hot water extraction",
             "Professional upholstery cleaner",
@@ -450,6 +458,7 @@ export const services: Service[] = [
             "Fast-drying equipment"
         ],
         benefits: [
+            "Valet service available for an additional $50",
             "Removes stains and odors",
             "Restores fabric appearance",
             "Healthier interior environment",
@@ -487,8 +496,8 @@ export const services: Service[] = [
         slug: "steam-cleaning",
         category: "primary",
         title: "IDA Certified Steam Cleaning & Auto Detailing San Antonio, TX | One Detail At A Time",
-        description: "Professional steam cleaning for San Antonio vehicles. Expert sanitization, deep cleaning & chemical-free detailing. Serving Stone Oak, Alamo Heights, North Side & all SA areas. Free quotes!",
-        metaDescription: "Expert steam cleaning service in San Antonio, TX. Chemical-free deep cleaning and sanitization for interior and exterior. Mobile service throughout San Antonio. IDA certified.",
+        description: "Professional steam cleaning in San Antonio. Expert sanitization, deep cleaning & chemical-free detailing. Drop off your vehicle at our studio or opt for our valet service. Free quotes!",
+        metaDescription: "Expert steam cleaning service in San Antonio, TX. Chemical-free deep cleaning and sanitization for interior and exterior. Valet service available. Drop off at our studio. IDA certified.",
         features: [
             "High-temperature steam",
             "Chemical-free cleaning",
@@ -498,6 +507,7 @@ export const services: Service[] = [
             "Kills bacteria and germs"
         ],
         benefits: [
+            "Valet service available for an additional $50",
             "Safe for all surfaces",
             "Environmentally friendly",
             "Deep sanitization",
@@ -535,8 +545,8 @@ export const services: Service[] = [
         slug: "wheel-washing",
         category: "primary",
         title: "IDA Certified Wheel Cleaning & Detailing San Antonio, TX | One Detail At A Time",
-        description: "Professional wheel washing for San Antonio vehicles. Expert brake dust removal, rim polishing & tire shine. Serving Stone Oak, Alamo Heights, North Side & all SA areas. Free quotes today!",
-        metaDescription: "Expert wheel cleaning and detailing in San Antonio, TX. Remove brake dust, polish rims, shine tires. All wheel types. Mobile service available. IDA certified detailers.",
+        description: "Professional wheel washing in San Antonio. Expert brake dust removal, rim polishing & tire shine. Drop off your vehicle at our studio or opt for our valet service. Free quotes today!",
+        metaDescription: "Expert wheel cleaning and detailing in San Antonio, TX. Remove brake dust, polish rims, shine tires. All wheel types. Valet service available. Drop off at our studio. IDA certified detailers.",
         features: [
             "Wheel-safe acid-free cleaner",
             "Dedicated wheel brushes",
@@ -546,6 +556,7 @@ export const services: Service[] = [
             "Wheel well cleaning"
         ],
         benefits: [
+            "Valet service available for an additional $50",
             "Prevents brake dust buildup",
             "Protects wheel finish",
             "Enhances appearance",
@@ -583,8 +594,8 @@ export const services: Service[] = [
         slug: "car-wash",
         category: "additional",
         title: "IDA Certified Car Wash San Antonio, TX | One Detail At A Time",
-        description: "Professional car wash service for San Antonio vehicles. Expert exterior cleaning, spot-free rinse & dry. Serving Stone Oak, Alamo Heights, North Side & all SA areas. Mobile service available!",
-        metaDescription: "Premium car wash service in San Antonio, TX. Hand wash, foam bath, and spot-free dry. Mobile service throughout San Antonio. Quick, convenient, and affordable. IDA certified.",
+        description: "Professional car wash service in San Antonio. Expert exterior cleaning, spot-free rinse & dry. Drop off your vehicle at our studio or opt for our valet service!",
+        metaDescription: "Premium car wash service in San Antonio, TX. Hand wash, foam bath, and spot-free dry. Valet service available. Drop off at our studio. Quick, convenient, and affordable. IDA certified.",
         features: [
             "Hand wash technique",
             "Foam pre-wash",
@@ -595,7 +606,7 @@ export const services: Service[] = [
         ],
         benefits: [
             "Gentle on paint",
-            "Convenient mobile service",
+            "Valet service available for an additional $50",
             "Professional results",
             "Quick turnaround",
             "Affordable pricing"
@@ -631,8 +642,8 @@ export const services: Service[] = [
         slug: "full-detail-package",
         category: "primary",
         title: "IDA Certified Full Detail Package San Antonio, TX | One Detail At A Time",
-        description: "Complete auto detailing package for San Antonio vehicles. Includes interior deep cleaning, exterior detailing, paint correction & protection. Serving all SA areas. Licensed & insured!",
-        metaDescription: "Comprehensive full detail package in San Antonio, TX. Complete interior and exterior detailing, paint correction, ceramic coating, and more. Best value for San Antonio residents. IDA certified.",
+        description: "Complete auto detailing package in San Antonio. Includes interior deep cleaning, exterior detailing, paint correction & protection. Drop off your vehicle at our studio or opt for our valet service. Licensed & insured!",
+        metaDescription: "Comprehensive full detail package in San Antonio, TX. Complete interior and exterior detailing, paint correction, ceramic coating, and more. Best value in San Antonio. Drop off at our studio or use our valet service. IDA certified.",
         features: [
             "Complete interior deep cleaning",
             "Exterior hand wash and dry",
@@ -644,6 +655,7 @@ export const services: Service[] = [
             "Interior scenting"
         ],
         benefits: [
+            "Valet service available for an additional $50",
             "Most comprehensive service",
             "Best value package",
             "Complete vehicle transformation",
@@ -699,7 +711,7 @@ export const reviews: Review[] = [
         name: "David Martinez",
         rating: 5,
         date: "2024-11-05",
-        comment: "IDA certification really shows in their work. They got out stains I thought were permanent. Mobile service was super convenient - they came to my office!",
+        comment: "IDA certification really shows in their work. They got out stains I thought were permanent. Valet service was super convenient - they picked up my car from my office!",
         service: "Seat Shampooing"
     },
     {
@@ -739,7 +751,7 @@ export const reviews: Review[] = [
         name: "Lisa Anderson",
         rating: 5,
         date: "2024-10-10",
-        comment: "Quick, affordable, and they came to my house! The mobile car wash service is so convenient. Will definitely use again.",
+        comment: "Quick, affordable, and they picked up my car from my house! The valet car wash service is so convenient. Will definitely use again.",
         service: "Car Wash"
     }
 ];

@@ -5,7 +5,7 @@ import { CheckCircle, Clock, MapPin, Phone } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Book Now | One Detail At A Time - San Antonio Auto Detailing",
-  description: "Schedule your auto detailing appointment in San Antonio, TX. Mobile service available throughout San Antonio. Book online or call (726) 207-1007.",
+  description: "Schedule your auto detailing appointment in San Antonio, TX. Valet service available throughout San Antonio. Book online or call (726) 207-1007.",
 };
 
 export default function BookingPage() {
@@ -58,7 +58,7 @@ export default function BookingPage() {
                     <div>
                       <p className="font-medium">Detailing Service</p>
                       <p className="text-sm text-muted-foreground">
-                        You will drop your vehicle at our designated location in San Antonio, TX
+                        You can drop your vehicle at our detailing studio, or we can pick it up for an additional $50 fee.
                       </p>
                     </div>
                   </div>

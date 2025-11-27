@@ -5,7 +5,7 @@ import { MapPin, Phone, Clock, Mail } from "lucide-react";
 
 export const metadata: Metadata = {
     title: "Contact Us - One Detail At A Time | Professional Auto Detailing San Antonio",
-    description: "Contact One Detail At A Time for professional auto detailing services in San Antonio, TX. Get your free quote today! Serving Stone Oak, Alamo Heights, and all SA areas.",
+    description: "Contact One Detail At A Time for professional auto detailing services in San Antonio, TX. Drop off your vehicle at our studio or use our valet service. Get your free quote today!",
     openGraph: {
         title: "Contact One Detail At A Time | Professional Auto Detailing San Antonio",
         description: "Contact One Detail At A Time for professional auto detailing services in San Antonio, TX. Get your free quote today!",
@@ -34,24 +34,6 @@ export default function ContactPage() {
             "postalCode": "78233",
             "addressCountry": "US"
         },
-        "areaServed": [
-            {
-                "@type": "City",
-                "name": "San Antonio"
-            },
-            {
-                "@type": "Neighborhood", 
-                "name": "Stone Oak"
-            },
-            {
-                "@type": "Neighborhood",
-                "name": "Alamo Heights"
-            },
-            {
-                "@type": "Neighborhood",
-                "name": "North Side"
-            }
-        ],
         "openingHours": [
             "Mo Closed",
             "Tu-Su 07:00-22:00",
@@ -171,71 +153,7 @@ export default function ContactPage() {
                     </div>
                 </section>
 
-                {/* Service Areas with Map */}
-                <section className="py-16">
-                    <div className="container">
-                        <div className="grid gap-8 lg:grid-cols-2">
-                            {/* Service Areas List */}
-                            <Card className="bg-muted/50">
-                                <CardContent className="p-6">
-                                    <h3 className="font-semibold text-lg mb-4">Areas We Serve</h3>
-                                    <div className="grid grid-cols-2 gap-2 text-sm">
-                                        {[
-                                            "Stone Oak",
-                                            "Alamo Heights",
-                                            "North Side",
-                                            "Downtown",
-                                            "Medical Center",
-                                            "Northwest Side",
-                                            "Northeast Side",
-                                            "Southtown",
-                                            "Pearl District",
-                                            "Terrell Hills",
-                                            "Encino Park",
-                                            "Hollywood Park"
-                                        ].map((area) => (
-                                            <div key={area} className="flex items-center gap-2">
-                                                <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-                                                <span>{area}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </CardContent>
-                            </Card>
 
-                            {/* Map Section */}
-                            <Card>
-                                <CardHeader>
-                                    <CardTitle className="text-xl">Our Service Location</CardTitle>
-                                    <p className="text-muted-foreground">
-                                        Based in San Antonio, we provide mobile service throughout the city
-                                    </p>
-                                </CardHeader>
-                                <CardContent className="p-0">
-                                    <div className="relative h-64 w-full">
-                                        <iframe
-                                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d110551.5312345678!2d-98.6!3d29.4!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x865c8e1b12345678%3A0x123456789abcdef0!2sSan%20Antonio%2C%20TX!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus"
-                                            width="100%"
-                                            height="256"
-                                            style={{ border: 0 }}
-                                            allowFullScreen
-                                            loading="lazy"
-                                            referrerPolicy="no-referrer-when-downgrade"
-                                            className="rounded-b-lg"
-                                            title="San Antonio Service Area"
-                                        />
-                                    </div>
-                                    <div className="p-4 bg-muted/30">
-                                        <p className="text-sm text-muted-foreground text-center">
-                                            Mobile service throughout San Antonio, TX • 
-                                            <span className="font-medium">Stone Oak • Alamo Heights • North Side</span> • and all SA areas
-                                        </p>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </div>
-                    </div>
-                </section>
 
                 {/* FAQ Section */}
                 <section className="py-16 bg-muted/50">
@@ -256,10 +174,9 @@ export default function ContactPage() {
                             </Card>
                             <Card>
                                 <CardContent className="p-6">
-                                    <h3 className="font-semibold mb-2">Do you provide mobile service?</h3>
+                                    <h3 className="font-semibold mb-2">Do you offer a valet service?</h3>
                                     <p className="text-muted-foreground">
-                                        Yes! We come directly to your location anywhere in San Antonio. 
-                                        This is our primary service method for your convenience.
+                                        Yes! For an added cost of $50, we will pick up and drop off your vehicle at any location and destination stated by you.
                                     </p>
                                 </CardContent>
                             </Card>

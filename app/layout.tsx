@@ -16,8 +16,8 @@ export const metadata: Metadata = {
     default: "One Detail At A Time | IDA Certified Auto Detailing San Antonio, TX",
     template: "%s | One Detail At A Time"
   },
-  description: "IDA certified auto detailing in San Antonio, TX. Expert car care, paint protection, interior cleaning, and mobile detailing services. Serving Stone Oak, Alamo Heights, North Side and all SA areas.",
-  keywords: ["auto detailing", "carwash", "car detailing", "San Antonio", "IDA certified", "mobile detailing", "paint correction", "ceramic coating", "interior detailing", "Stone Oak", "Alamo Heights"],
+  description: "IDA certified auto detailing in San Antonio, TX. Expert car care, paint protection, and interior cleaning services at our detailing studio. Serving Stone Oak, Alamo Heights, North Side and all SA areas.",
+  keywords: ["auto detailing", "carwash", "car detailing", "San Antonio", "IDA certified", "paint correction", "ceramic coating", "interior detailing", "Stone Oak", "Alamo Heights"],
   authors: [{ name: "One Detail At A Time LLC" }],
   creator: "One Detail At A Time",
   publisher: "One Detail At A Time",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "One Detail At A Time | IDA Certified Auto Detailing San Antonio",
-    description: "Premium auto detailing services in San Antonio, TX. Expert car care with mobile service throughout all SA areas.",
+    description: "Premium auto detailing services in San Antonio, TX. Expert car care at our detailing studio, serving all SA areas.",
     url: "https://1detailatatime.com",
     siteName: "One Detail At A Time",
     locale: "en_US",

@@ -46,11 +46,10 @@ export default function HomePage() {
               <span className="block text-primary mt-2">in San Antonio, TX</span>
             </h1>
 
-            <p className="max-w-[700px] text-lg text-muted-foreground sm:text-xl">
-              Expert mobile detailing services for Stone Oak, Alamo Heights, North Side, and all San Antonio areas.
-              Transform your vehicle with IDA certified professionals.
-            </p>
-
+                          <p className="max-w-[700px] text-lg text-muted-foreground sm:text-xl">
+                          Expert detailing services at our studio for Stone Oak, Alamo Heights, North Side, and all San Antonio areas.
+                          Transform your vehicle with IDA certified professionals.
+                        </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Button size="lg" asChild className="text-lg">
                 <Link href="/booking">
@@ -69,7 +68,7 @@ export default function HomePage() {
             <div className="flex items-center gap-8 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <CheckCircle className="h-5 w-5 text-primary" />
-                <span>Mobile Service</span>
+                <span>Valet Service</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle className="h-5 w-5 text-primary" />

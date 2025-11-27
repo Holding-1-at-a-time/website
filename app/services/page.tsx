@@ -7,10 +7,10 @@ import { ArrowRight, CheckCircle, Clock, DollarSign, MapPin, Star } from "lucide
 
 export const metadata: Metadata = {
     title: "Professional Auto Detailing Services in San Antonio, TX | One Detail At A Time",
-    description: "Premium mobile auto detailing services in San Antonio, TX. Expert car washing, waxing, paint correction & interior cleaning. Serving Stone Oak, Alamo Heights, North Side & all SA areas. IDA certified & insured.",
+    description: "Premium auto detailing services in San Antonio, TX. Expert car washing, waxing, paint correction & interior cleaning. Serving Stone Oak, Alamo Heights, North Side & all SA areas. IDA certified & insured.",
     openGraph: {
         title: "Professional Auto Detailing Services in San Antonio, TX | One Detail At A Time",
-        description: "Premium mobile auto detailing services in San Antonio, TX. Expert car washing, waxing, paint correction & interior cleaning.",
+        description: "Premium auto detailing services in San Antonio, TX. Expert car washing, waxing, paint correction & interior cleaning.",
         type: "website",
         url: "https://1detailatatime.com/services",
     },
@@ -26,8 +26,8 @@ export default function ServicesPage() {
     const jsonLd = {
         "@context": "https://schema.org",
         "@type": "Service",
-        "name": "Mobile Auto Detailing Services",
-        "description": "Professional mobile auto detailing services throughout San Antonio, TX",
+        "name": "Auto Detailing Services",
+        "description": "Professional auto detailing services throughout San Antonio, TX",
         "provider": {
             "@type": "LocalBusiness",
             "name": "One Detail At A Time",
@@ -89,8 +89,8 @@ export default function ServicesPage() {
                             </h1>
 
                             <p className="text-lg text-muted-foreground">
-                                IDA certified mobile auto detailing services throughout San Antonio. 
-                                From basic washes to complete paint correction, we bring professional results to your location.
+                                IDA certified auto detailing services throughout San Antonio. 
+                                From basic washes to complete paint correction, we bring professional results.
                             </p>
 
                             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -242,8 +242,8 @@ export default function ServicesPage() {
                                 <div className="w-16 h-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold mx-auto">
                                     <MapPin className="h-8 w-8" />
                                 </div>
-                                <h3 className="text-xl font-semibold">Mobile Service</h3>
-                                <p className="text-muted-foreground">We come to you - home, office, or anywhere in San Antonio</p>
+                                <h3 className="text-xl font-semibold">Valet Service</h3>
+                                <p className="text-muted-foreground">We offer a valet service for an added cost of $50. We will pick up and drop off your vehicle at any location and destination stated by you.</p>
                             </div>
                             <div className="text-center space-y-4">
                                 <div className="w-16 h-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold mx-auto">
@@ -271,7 +271,7 @@ export default function ServicesPage() {
                                 Serving San Antonio & Surrounding Areas
                             </h2>
                             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                                Mobile auto detailing services throughout San Antonio and nearby communities
+                                Auto detailing services throughout San Antonio and nearby communities
                             </p>
                         </div>
                         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 text-center">
