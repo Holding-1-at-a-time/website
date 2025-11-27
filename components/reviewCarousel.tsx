@@ -41,6 +41,15 @@ const reviewSchema = reviews.map(review => ({
 
 
 
+/**
+ * A carousel component for displaying customer reviews.
+ *
+ * @remarks
+ * This component uses the EmblaCarousel library to create a smooth, infinite carousel of customer reviews.
+ * It includes a prev/next button pair to navigate the carousel, as well as a set of pagination dots to indicate the current position of the carousel.
+ * The component uses Next.js's built-in support for JSON-LD to provide a schema.org-compliant review snippet for search engines.
+ * The component's styles are designed to be responsive and accessible, with a focus on providing a good user experience on a variety of devices and screen readers.
+ */
 export function ReviewCarousel() {
     const [emblaRef, emblaApi] = useEmblaCarousel({
         loop: true,

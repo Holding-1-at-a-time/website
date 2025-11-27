@@ -15,6 +15,18 @@ const routes = [
   { name: "Book Now", href: "/booking", highlight: true },
 ];
 
+/**
+ * A navigation component that displays a header with navigation links.
+ * The navigation links are determined by the routes array.
+ * The component uses the usePathname hook from next/navigation to determine the current pathname.
+ * The component also uses the useState hook to manage the state of the mobile menu.
+ * The mobile menu is hidden by default and is displayed when the mobile menu button is clicked.
+ * The mobile menu is a container with a flex column layout that contains navigation links.
+ * The mobile menu is closed when a navigation link is clicked.
+ * The component also includes a button for calling the business.
+ * The button is hidden on desktop and is displayed on mobile.
+ */
+
 export function Navigation() {
   const [isOpen, setIsOpen] = React.useState(false);
   const pathname = usePathname();
