@@ -1,50 +1,65 @@
-import { MetadataRoute } from 'next'
+import { NextRequest } from 'next/server'
 import { services } from '@/lib/data'
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export async function GET(request: NextRequest) {
   const baseUrl = 'https://1detailatatime.com'
+  const currentDate = new Date().toISOString().split('T')[0]
   
-  // Static pages
-  const staticPages = [
+  // Generate sitemap XML
+  const urls = [
+    // Static pages
     {
       url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 1.0,
+      lastmod: currentDate,
+      changefreq: 'weekly',
+      priority: '1.0',
     },
     {
       url: `${baseUrl}/about`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.8,
+      lastmod: currentDate,
+      changefreq: 'monthly',
+      priority: '0.8',
     },
     {
       url: `${baseUrl}/services`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.9,
+      lastmod: currentDate,
+      changefreq: 'weekly',
+      priority: '0.9',
     },
     {
       url: `${baseUrl}/contact`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.9,
+      lastmod: currentDate,
+      changefreq: 'monthly',
+      priority: '0.9',
     },
     {
       url: `${baseUrl}/booking`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
+      lastmod: currentDate,
+      changefreq: 'weekly',
+      priority: '0.8',
     },
+    // Service pages
+    ...services.map((service) => ({
+      url: `${baseUrl}/services/${service.slug}`,
+      lastmod: currentDate,
+      changefreq: 'monthly',
+      priority: '0.7',
+    })),
   ]
 
-  // Service pages
-  const servicePages = services.map((service) => ({
-    url: `${baseUrl}/services/${service.slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'monthly' as const,
-    priority: 0.7,
-  }))
+  const sitemapXML = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.map(url => `  <url>
+    <loc>${url.url}</loc>
+    <lastmod>${url.lastmod}</lastmod>
+    <changefreq>${url.changefreq}</changefreq>
+    <priority>${url.priority}</priority>
+  </url>`).join('\n')}
+</urlset>`
 
-  return [...staticPages, ...servicePages]
+  return new Response(sitemapXML, {
+    headers: {
+      'Content-Type': 'application/xml',
+    },
+  })
 }
