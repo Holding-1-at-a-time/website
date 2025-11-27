@@ -53,9 +53,8 @@ export default function ContactPage() {
             }
         ],
         "openingHours": [
-            "Mo-Fr 08:00-18:00",
-            "Sa 09:00-17:00",
-            "Su 10:00-16:00"
+            "Mo Closed",
+            "Tu-Su 07:00-22:00",
         ],
         "priceRange": "$39-$399+"
     };
@@ -158,7 +157,7 @@ export default function ContactPage() {
                                         <div>
                                             <h3 className="font-semibold text-lg">Business Hours</h3>
                                             <div className="text-muted-foreground space-y-1">
-                                                <p>Monday - Cosed</p>
+                                                <p>Monday - Closed</p>
                                                 <p>Tuesday - Sunday: 7:00 AM - 10:00 PM</p>
                                             </div>
                                             <p className="text-sm text-muted-foreground">

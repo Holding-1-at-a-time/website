@@ -8,6 +8,38 @@ import { Star, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+// Pre-compute review schema outside component to avoid unnecessary re-renders
+const reviewSchema = reviews.map(review => ({
+    "@context": "https://schema.org",
+    "@type": "Review",
+    "author": {
+        "@type": "Person",
+        "name": review.name,
+    },
+    "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": review.rating.toString(),
+        "bestRating": "5",
+    },
+    "reviewBody": review.comment,
+    "datePublished": review.date,
+    "itemReviewed": {
+        "@type": "LocalBusiness",
+        "name": "One Detail At A Time",
+        "image": "https://1detailatatime.com/logo.png",
+        "telephone": "(726) 207-1007",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "11692 Bricken Circle",
+            "addressLocality": "San Antonio",
+            "addressRegion": "TX",
+            "postalCode": "78233",
+            "addressCountry": "US"
+        }
+    }
+}));
+
+
 
 export function ReviewCarousel() {
     const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -37,35 +69,6 @@ export function ReviewCarousel() {
         emblaApi.on("reInit", onSelect);
     }, [emblaApi, onSelect]);
 
-    const reviewSchema = reviews.map(review => ({
-        "@context": "https://schema.org",
-        "@type": "Review",
-        "author": {
-            "@type": "Person",
-            "name": review.name,
-        },
-        "reviewRating": {
-            "@type": "Rating",
-            "ratingValue": review.rating.toString(),
-            "bestRating": "5",
-        },
-        "reviewBody": review.comment,
-        "datePublished": review.date,
-        "itemReviewed": {
-            "@type": "LocalBusiness",
-            "name": "One Detail At A Time",
-            "image": "https://1detailatatime.com/logo.png",
-            "telephone": "(726) 207-1007",
-            "address": {
-                "@type": "PostalAddress",
-                "streetAddress": "11692 Bricken Circle",
-                "addressLocality": "San Antonio",
-                "addressRegion": "TX",
-                "postalCode": "78233",
-                "addressCountry": "US"
-            }
-        }
-    }));
 
     return (
         <div className="relative">
@@ -117,7 +120,7 @@ export function ReviewCarousel() {
                                                 </div>
                                             </div>
                                             <p className="text-muted-foreground leading-relaxed">
-                                                "{review.comment}"
+                                                &ldquo;{review.comment}&rdquo;
                                             </p>
                                             <p className="text-sm text-muted-foreground">
                                                 {new Date(review.date).toLocaleDateString('en-US', {
