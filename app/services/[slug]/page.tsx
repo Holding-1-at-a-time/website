@@ -23,7 +23,7 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = params;
   const service = getServiceBySlug(slug);
-  
+
   if (!service) {
     return {
       title: "Service Not Found",
@@ -58,11 +58,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
  */
 export default async function ServicePage({ params }: PageProps) {
   const { slug } = params;
-  const service = getServiceBySlug(slug);
+  const service =  getServiceBySlug(slug);
+  
+  
 
   if (!service) {
     notFound();
   }
+
+  const metadata = await generateMetadata({ params });
+
 
   const jsonLd = {
     "@context": "https://schema.org",
