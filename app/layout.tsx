@@ -8,6 +8,7 @@ import { ThemeProvider } from "@/components/themeProvider";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/next"
 import { ConvexClientProvider } from "./ConvexClientProvider";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -165,9 +166,11 @@ export default function RootLayout({
           <div className="flex min-h-screen flex-col">
             <Navigation />
             <main className="flex-1">
-              <ConvexClientProvider>
-                {children}
-              </ConvexClientProvider>
+              <ErrorBoundary>
+                <ConvexClientProvider>
+                  {children}
+                </ConvexClientProvider>
+              </ErrorBoundary>
               <Analytics />
               <SpeedInsights />
             </main>

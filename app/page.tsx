@@ -29,13 +29,14 @@ export default function HomePage() {
             </div>
 
             <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-              Premium Auto Detailing
-              <span className="block text-primary mt-2">in San Antonio, TX</span>
+              San Antonio's Premier
+              <span className="block text-primary mt-2">Auto Detailing Specialists</span>
             </h1>
 
             <p className="max-w-[700px] text-lg text-muted-foreground sm:text-xl">
-              Expert detailing services at our studio for Stone Oak, Alamo Heights, North Side, and all San Antonio areas.
-              Transform your vehicle with IDA certified professionals.
+              Professional studio auto detailing services in San Antonio, TX.
+              Serving Stone Oak, Alamo Heights, North Side, Terrell Hills, Encino Park, and surrounding areas.
+              IDA certified professionals with same-day service available.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
@@ -56,15 +57,15 @@ export default function HomePage() {
             <div className="flex items-center gap-8 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <CheckCircle className="h-5 w-5 text-primary" />
-                <span>Valet Service</span>
+                <span>Professional Studio</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle className="h-5 w-5 text-primary" />
-                <span>Same-Day Available</span>
+                <span>Valet Service Available</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle className="h-5 w-5 text-primary" />
-                <span>Free Quotes</span>
+                <span>Free Quotes & Estimates</span>
               </div>
             </div>
           </div>
@@ -79,7 +80,8 @@ export default function HomePage() {
               Our Services
             </h2>
             <p className="max-w-[700px] text-muted-foreground md:text-lg">
-              Professional auto detailing services tailored to your vehicle's needs
+              Expert auto detailing services for San Antonio drivers - from luxury vehicles to everyday cars.
+              Professional paint correction, ceramic coating, interior detailing, and more.
             </p>
           </div>
 
@@ -132,6 +134,54 @@ export default function HomePage() {
               Real reviews from satisfied San Antonio customers
             </p>
           </div>
+      {/* San Antonio Areas Section */}
+      <section className="py-16 bg-background">
+        <div className="container">
+          <div className="flex flex-col items-center text-center space-y-6 mb-12">
+            <h2 className="text-2xl font-bold tracking-tighter sm:text-3xl">
+              Proudly Serving All of San Antonio
+            </h2>
+            <p className="max-w-[600px] text-muted-foreground">
+              From the heart of downtown to the suburbs, we bring professional auto detailing services directly to you throughout the San Antonio metro area.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 text-center">
+            {[
+              'Downtown San Antonio',
+              'Stone Oak', 
+              'Alamo Heights',
+              'North Side',
+              'Terrell Hills',
+              'Encino Park',
+              'Medical Center',
+              'The Pearl District',
+              'Southtown',
+              'Castle Hills',
+              'Hollywood Park',
+              'Windcrest'
+            ].map((area) => (
+              <div key={area} className="p-3 bg-muted/50 rounded-lg hover:bg-muted transition-colors">
+                <span className="text-sm font-medium text-muted-foreground">{area}</span>
+              </div>
+            ))}
+          </div>
+          
+          <div className="flex justify-center mt-8">
+            <div className="text-center max-w-2xl">
+              <p className="text-sm text-muted-foreground mb-4">
+                <strong>Don't see your area listed?</strong> We service the entire San Antonio metropolitan area!
+              </p>
+              <Button variant="outline" asChild>
+                <Link href="/contact">
+                  Check Service Availability in Your Area
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
           <ReviewCarousel />
         </div>
       </section>
@@ -144,7 +194,8 @@ export default function HomePage() {
               Ready to Transform Your Vehicle?
             </h2>
             <p className="max-w-[700px] text-lg text-primary-foreground/90">
-              Get a free quote today and experience the difference of IDA certified detailing
+              Ready to give your vehicle the professional care it deserves?
+              Get your free quote today and discover why San Antonio drivers trust us for premium auto detailing.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Button size="lg" variant="secondary" asChild>

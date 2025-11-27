@@ -2,20 +2,57 @@ import type { Metadata } from "next";
 import { ContactForm } from "@/components/forms/contactForm";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPin, Phone, Clock, Mail } from "lucide-react";
+/**
+ * Metadata for the Contact page.
+ *
+ * @see https://nextjs.org/docs/api-reference/internationalization-and-localization#metadata
+ */
 
 export const metadata: Metadata = {
+    /**
+     * The title of the page.
+     */
     title: "Contact Us - One Detail At A Time | Professional Auto Detailing San Antonio",
+    /**
+     * The description of the page.
+     */
     description: "Contact One Detail At A Time for professional auto detailing services in San Antonio, TX. Drop off your vehicle at our studio or use our valet service. Get your free quote today!",
+    /**
+     * Open Graph metadata for the page.
+     *
+     * @see https://ogp.me/
+     */
     openGraph: {
+        /**
+         * The title of the page.
+         */
         title: "Contact One Detail At A Time | Professional Auto Detailing San Antonio",
+        /**
+         * The description of the page.
+         */
         description: "Contact One Detail At A Time for professional auto detailing services in San Antonio, TX. Get your free quote today!",
+        /**
+         * The type of the page.
+         */
         type: "website",
+        /**
+         * The URL of the page.
+         */
         url: "https://1detailatatime.com/contact",
     },
+    /**
+     * Alternate URLs for the page.
+     *
+     * @see https://nextjs.org/docs/api-reference/internationalization-and-localization#alternate-urls
+     */
     alternates: {
+        /**
+         * The canonical URL of the page.
+         */
         canonical: "https://1detailatatime.com/contact",
     },
 };
+
 
 export default function ContactPage() {
     const jsonLd = {

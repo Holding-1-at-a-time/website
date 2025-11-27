@@ -56,8 +56,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
  * Additionally, it renders a process section with the service's process steps and a service areas section with the areas served by the service.
  * Finally, it renders a call-to-action (CTA) section with a link to book the service and a link to get a free quote.
  */
-
-
 export default async function ServicePage({ params }: PageProps) {
   const { slug } = params;
   const service = getServiceBySlug(slug);

@@ -85,12 +85,13 @@ export default function ServicesPage() {
                             </div>
 
                             <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
-                                Professional Auto Detailing Services
+                                Expert Auto Detailing Services in San Antonio
                             </h1>
 
                             <p className="text-lg text-muted-foreground">
-                                IDA certified auto detailing services throughout San Antonio. 
-                                From basic washes to complete paint correction, we bring professional results.
+                                San Antonio's trusted IDA certified auto detailing professionals.
+                                Professional studio services for Stone Oak, Alamo Heights, North Side, and all San Antonio areas.
+                                From ceramic coating to interior detailing, we deliver showroom-quality results.
                             </p>
 
                             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -271,11 +272,12 @@ export default function ServicesPage() {
                                 Serving San Antonio & Surrounding Areas
                             </h2>
                             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                                Auto detailing services throughout San Antonio and nearby communities
+                                Professional auto detailing services throughout San Antonio and all surrounding communities.
+                                Professional studio with same-day service available.
                             </p>
                         </div>
-                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 text-center">
-                            {["Stone Oak", "Alamo Heights", "North Side", "Downtown", "Medical Center", "Northwest Side", "Northeast Side", "All San Antonio Areas"].map((area) => (
+                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 text-center">
+                            {["Downtown San Antonio", "Stone Oak", "Alamo Heights", "North Side", "Medical Center", "The Pearl District", "Terrell Hills", "Encino Park", "Castle Hills", "Hollywood Park", "Windcrest", "Live Oak"].map((area) => (
                                 <Card key={area}>
                                     <CardContent className="p-4">
                                         <MapPin className="h-5 w-5 text-primary mx-auto mb-2" />

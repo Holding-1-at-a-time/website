@@ -84,10 +84,12 @@ export const BUSINESS_INFO = {
   
   // Services
   services: {
+    studioBased: true,
     valetAvailable: true,
     valetPrice: "$50",
     sameDayAvailable: true,
-    freeQuotes: true
+    freeQuotes: true,
+    professionalStudio: true
   },
   
   // Social Media & Online Presence
