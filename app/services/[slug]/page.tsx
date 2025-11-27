@@ -7,11 +7,14 @@ import { getServiceBySlug, services } from "@/lib/data";
 import { ArrowRight, CheckCircle, Clock, DollarSign, MapPin, Phone } from "lucide-react";
 import { notFound } from "next/navigation";
 
-export async function generateStaticParams() {
-  return services.map((service) => ({
-    slug: service.slug,
-  }));
-}
+//** */ Generate static paths for all services *//
+//export async function generateStaticParams() {
+//  return services.map((service) => ({
+//    slug: service.slug,
+//  }));
+//}
+//** */ Get service by slug *//
+
 
 interface PageProps {
   params: {
@@ -19,6 +22,12 @@ interface PageProps {
   };
 }
 
+/**
+ * Generates metadata for a service page.
+ *
+ * @param {PageProps} props - props passed to the page component.
+ * @returns {Promise<Metadata>} - a promise that resolves to the metadata for the page.
+ */
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = params;
   const service = getServiceBySlug(slug);
@@ -43,6 +52,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     },
   };
 }
+
+/**
+ * A page component for a service page.
+ *
+ * @param {PageProps} props - props passed to the page component.
+ * @returns {JSX.Element} - the JSX element for the page.
+ *
+ * The page component renders a hero section with the service name, description, and price.
+ * It also renders a features section with the service's features and a benefits section with the service's benefits.
+ * Additionally, it renders a process section with the service's process steps and a service areas section with the areas served by the service.
+ * Finally, it renders a call-to-action (CTA) section with a link to book the service and a link to get a free quote.
+ */
+
 
 export default async function ServicePage({ params }: PageProps) {
   const { slug } = params;

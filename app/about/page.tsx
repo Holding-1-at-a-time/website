@@ -45,9 +45,7 @@ export default function AboutPage() {
               </div>
             </div>
             <div className="relative aspect-video bg-muted rounded-lg overflow-hidden">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-muted-foreground">lib/One Detail At A Time LLC Pro & Private Auto Detailing Studio.jpg</span>
-              </div>
+              <Image src={studioImage} alt="One Detail At A Time auto detailing studio" layout="fill" objectFit="cover" placeholder="blur" />
             </div>
           </div>
         </div>

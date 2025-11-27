@@ -33,10 +33,11 @@ export default function HomePage() {
               <span className="block text-primary mt-2">in San Antonio, TX</span>
             </h1>
 
-                          <p className="max-w-[700px] text-lg text-muted-foreground sm:text-xl">
-                          Expert detailing services at our studio for Stone Oak, Alamo Heights, North Side, and all San Antonio areas.
-                          Transform your vehicle with IDA certified professionals.
-                        </p>
+            <p className="max-w-[700px] text-lg text-muted-foreground sm:text-xl">
+              Expert detailing services at our studio for Stone Oak, Alamo Heights, North Side, and all San Antonio areas.
+              Transform your vehicle with IDA certified professionals.
+            </p>
+
             <div className="flex flex-col sm:flex-row gap-4">
               <Button size="lg" asChild className="text-lg">
                 <Link href="/booking">
@@ -166,10 +167,15 @@ export default function HomePage() {
 }
 
 /**
- * A component that renders a carousel of customer reviews.
+ * A carousel component for displaying customer reviews.
  *
- * @returns {JSX.Element} A JSX element containing a carousel of customer reviews.
+ * @remarks
+ * This component uses the EmblaCarousel library to create a smooth, infinite carousel of customer reviews.
+ * It includes a prev/next button pair to navigate the carousel, as well as a set of pagination dots to indicate the current position of the carousel.
+ * The component uses Next.js's built-in support for JSON-LD to provide a schema.org-compliant review snippet for search engines.
+ * The component's styles are designed to be responsive and accessible, with a focus on providing a good user experience on a variety of devices and screen readers.
  */
+
 function ReviewCarousel() {
   const reviews = [
     {
@@ -228,39 +234,45 @@ function ReviewCarousel() {
  * @param {React.ComponentProps<"div">} props - Props to pass to the component
  * @returns {JSX.Element} - The card component
  */
+
 function Card({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div className={cn("rounded-lg border bg-card text-card-foreground shadow-sm", className)} {...props} />
   );
 }
 
-/**
- * A card header component
- *
- * A card header component that displays a heading and possible other elements
-/**
- * A card title component
- *
- * A card title component that displays a heading in a card.
- * It is a h3 element with font size of 2xl, font weight of
- * semi-bold, leading of none, and letter spacing of normal.
- *
- * @param {React.ComponentProps<"div">} props - Props to pass to the component
- * @returns {JSX.Element} - The card title component
 
-
- * in a card. It is a flex container with column direction, and has
- * space between elements.
+/**
+ * A card header component.
  *
- * @param {React.ComponentProps<"div">} props - Props to pass to the component
- * @returns {JSX.Element} - The card header component
+ * A container component with a flexbox layout and a padding of 1.5rem.
+ * It is intended to be used as a header for the Card component.
+ *
+ * @typedef {React.ComponentProps<"div">} CardHeaderProps
+ * @prop {string} className - Additional CSS classes to apply to the component
+
+ * A card title component.
+ *
+ * A heading component with a font size of 2xl, font weight of bold, and line height of 1.25.
+ * It is intended to be used as a title for the Card component.
+ *
+ * @param {string} className - Additional CSS classes to apply to the component
+ * It is intended to be used as a title for the Card component.
+ *
  */
+ * @param {React.ComponentProps<"div">} props - Additional props to pass to the component
+ */
+ * @prop {React.ComponentProps<"div">} props - Additional props to pass to the component
+ */
+
 
 function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div className={cn("flex flex-col space-y-1.5 p-6", className)} {...props} />
   );
 }
+
+
 
 function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
   return (
