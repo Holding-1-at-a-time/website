@@ -3,9 +3,15 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { getServiceBySlug } from "@/lib/data";
+import { getServiceBySlug, services } from "@/lib/data";
 import { ArrowRight, CheckCircle, Clock, DollarSign, MapPin, Phone } from "lucide-react";
 import { notFound } from "next/navigation";
+
+export async function generateStaticParams() {
+  return services.map((service) => ({
+    slug: service.slug,
+  }));
+}
 
 interface PageProps {
   params: {
