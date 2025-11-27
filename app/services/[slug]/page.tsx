@@ -8,13 +8,13 @@ import { ArrowRight, CheckCircle, Clock, DollarSign, MapPin, Phone } from "lucid
 import { notFound } from "next/navigation";
 
 interface PageProps {
-  params: Promise<{
+  params: {
     slug: string;
-  }>;
+  };
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug } = params;
   const service = getServiceBySlug(slug);
   
   if (!service) {
@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function ServicePage({ params }: PageProps) {
-  const { slug } = await params;
+  const { slug } = params;
   const service = getServiceBySlug(slug);
 
   if (!service) {
