@@ -1,0 +1,254 @@
+import { ConvexError, v } from "convex/values";
+import { 
+  ValidationError, 
+  AuthorizationError, 
+  RateLimitError,
+  sanitizeInput,
+  validateEmail,
+  validatePhone
+} from "./validators";
+
+// Rate limiting store (in production, use Redis or similar)
+const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
+
+// Permission constants
+export const PERMISSIONS = {
+  // Booking permissions
+  BOOKINGS_READ: "bookings:read",
+  BOOKINGS_WRITE: "bookings:write",
+  BOOKINGS_DELETE: "bookings:delete",
+  
+  // Customer permissions
+  CUSTOMERS_READ: "customers:read",
+  CUSTOMERS_WRITE: "customers:write",
+  
+  // Service permissions
+  SERVICES_READ: "services:read",
+  SERVICES_WRITE: "services:write",
+  
+  // Review permissions
+  REVIEWS_READ: "reviews:read",
+  REVIEWS_WRITE: "reviews:write",
+  REVIEWS_MODERATE: "reviews:moderate",
+  
+  // Admin permissions
+  ADMIN_MANAGE: "admin:manage",
+  SETTINGS_MANAGE: "settings:manage",
+} as const;
+
+export const ROLE_PERMISSIONS = {
+  admin: Object.values(PERMISSIONS),
+  staff: [
+    PERMISSIONS.BOOKINGS_READ,
+    PERMISSIONS.BOOKINGS_WRITE,
+    PERMISSIONS.CUSTOMERS_READ,
+    PERMISSIONS.CUSTOMERS_WRITE,
+    PERMISSIONS.SERVICES_READ,
+    PERMISSIONS.REVIEWS_READ,
+  ],
+};
+
+// Get current authenticated user
+export async function getCurrentUser(ctx: any) {
+  // For now, we'll implement a simple user check
+  // In production, this would integrate with Convex auth
+  const userToken = ctx.headers.get("authorization")?.replace("Bearer ", "");
+  if (!userToken) return null;
+  
+  // Simple token validation (replace with proper auth in production)
+  if (userToken === "admin_token_demo") {
+    return {
+      _id: "admin_demo",
+      userId: "admin_demo",
+      email: "admin@1detailatatime.com",
+      name: "Demo Admin",
+      role: "admin" as const,
+      permissions: ROLE_PERMISSIONS.admin,
+      isActive: true,
+    };
+  }
+  
+  return null;
+}
+
+// Rate limiting function
+export function rateLimit(key: string, limit: number, windowMs: number): boolean {
+  const now = Date.now();
+  const record = rateLimitStore.get(key);
+
+  if (!record || now > record.resetTime) {
+    rateLimitStore.set(key, { count: 1, resetTime: now + windowMs });
+    return true;
+  }
+
+  if (record.count >= limit) {
+    return false;
+  }
+
+  record.count++;
+  return true;
+}
+
+// Input sanitization and validation
+export function sanitizeAndValidateBooking(data: any) {
+  // Sanitize inputs
+  const sanitized = {
+    customerName: sanitizeInput(data.customerName || ""),
+    customerEmail: sanitizeInput(data.customerEmail || ""),
+    customerPhone: sanitizeInput(data.customerPhone || ""),
+    serviceId: data.serviceId,
+    preferredDate: sanitizeInput(data.preferredDate || ""),
+    preferredTime: sanitizeInput(data.preferredTime || ""),
+    vehicleType: data.vehicleType,
+    message: data.message ? sanitizeInput(data.message) : undefined,
+  };
+
+  // Validate inputs
+  if (!sanitized.customerName || sanitized.customerName.length < 2) {
+    throw new ConvexError("Name must be at least 2 characters");
+  }
+  if (!validateEmail(sanitized.customerEmail)) {
+    throw new ConvexError("Invalid email address");
+  }
+  if (!validatePhone(sanitized.customerPhone)) {
+    throw new ConvexError("Invalid phone number format");
+  }
+  if (!sanitized.preferredDate || !/^\d{4}-\d{2}-\d{2}$/.test(sanitized.preferredDate)) {
+    throw new ConvexError("Invalid date format (YYYY-MM-DD)");
+  }
+  if (!sanitized.preferredTime || !/^\d{1,2}:\d{2}\s?(AM|PM)$/i.test(sanitized.preferredTime)) {
+    throw new ConvexError("Invalid time format");
+  }
+
+  return sanitized;
+}
+
+// Session management (simplified)
+export async function createSession(ctx: any, userId: string) {
+  const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  const expiresAt = Date.now() + 24 * 60 * 60 * 1000; // 24 hours
+
+  await ctx.db.insert("sessions", {
+    sessionId,
+    userId,
+    expiresAt,
+    createdAt: Date.now(),
+    lastAccessed: Date.now(),
+    metadata: {
+      userAgent: ctx.headers.get("user-agent") || "",
+      ipAddress: ctx.headers.get("x-forwarded-for") || ctx.headers.get("x-real-ip") || "",
+    },
+  });
+
+  return sessionId;
+}
+
+export async function validateSession(ctx: any, sessionId: string) {
+  const session = await ctx.db
+    .query("sessions")
+    .filter((q: any) => q.eq(q.field("sessionId"), sessionId))
+    .unique();
+
+  if (!session || session.expiresAt < Date.now()) {
+    if (session) {
+      await ctx.db.delete(session._id);
+    }
+    throw new ConvexError("Invalid or expired session");
+  }
+
+  // Update last accessed time
+  await ctx.db.patch(session._id, {
+    lastAccessed: Date.now(),
+  });
+
+  return session;
+}
+
+// Activity logging
+export async function logActivity(
+  ctx: any, 
+  action: string, 
+  metadata: {
+    userId?: string;
+    bookingId?: string;
+    customerEmail?: string;
+    changes?: string;
+  } = {}
+) {
+  await ctx.db.insert("activityLog", {
+    action,
+    userId: metadata.userId,
+    bookingId: metadata.bookingId,
+    customerEmail: metadata.customerEmail,
+    timestamp: Date.now(),
+    metadata: {
+      userAgent: ctx.headers.get("user-agent") || "",
+      ipAddress: ctx.headers.get("x-forwarded-for") || ctx.headers.get("x-real-ip") || "",
+      changes: metadata.changes,
+    },
+  });
+}
+
+// Booking conflict detection
+export async function checkBookingConflicts(
+  ctx: any,
+  date: string,
+  time: string,
+  excludeBookingId?: string
+) {
+  let query = ctx.db
+    .query("bookings")
+    .filter((q: any) => 
+      q.and(
+        q.eq(q.field("preferredDate"), date),
+        q.eq(q.field("preferredTime"), time),
+        q.eq(q.field("status"), "confirmed")
+      )
+    );
+
+  if (excludeBookingId) {
+    query = query.filter((q: any) => q.neq(q.field("_id"), excludeBookingId));
+  }
+
+  const conflictingBookings = await query.collect();
+  
+  if (conflictingBookings.length > 0) {
+    throw new ConvexError("This time slot is already booked");
+  }
+}
+
+// Security headers configuration
+export function getSecurityHeaders() {
+  return {
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "X-XSS-Protection": "1; mode=block",
+    "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+    "Content-Security-Policy": [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-eval'",
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data: https:",
+      "connect-src 'self' wss: https:",
+      "font-src 'self'",
+      "object-src 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+      "frame-ancestors 'none'",
+      "upgrade-insecure-requests",
+    ].join("; "),
+  };
+}
+
+// Error handling utility
+export function handleConvexError(error: any) {
+  if (error instanceof ConvexError) {
+    return error.message;
+  }
+  
+  if (error.message) {
+    return error.message;
+  }
+  
+  return "An unexpected error occurred";
+}
