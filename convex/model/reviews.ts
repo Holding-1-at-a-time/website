@@ -21,27 +21,23 @@ export interface ReviewData {
  * Get approved reviews for public display
  */
 export async function getApprovedReviews(ctx: QueryCtx, limit: number = 20) {
-  const reviews = await ctx.db
-    .query("reviews")
-    .withIndex("by_approved", (q) => q.eq("isApproved", true))
-    .order("desc")
-    .take(limit);
-  
-  return reviews;
+  return await ctx.db
+      .query("reviews")
+      .withIndex("by_approved", (q) => q.eq("isApproved", true))
+      .order("desc")
+      .take(limit);
 }
 
 /**
  * Get featured reviews for homepage display
  */
 export async function getFeaturedReviews(ctx: QueryCtx, limit: number = 6) {
-  const reviews = await ctx.db
-    .query("reviews")
-    .withIndex("by_approved", (q) => q.eq("isApproved", true))
-    .filter((q) => q.eq(q.field("isFeatured"), true))
-    .order("desc")
-    .take(limit);
-  
-  return reviews;
+  return await ctx.db
+      .query("reviews")
+      .withIndex("by_approved", (q) => q.eq("isApproved", true))
+      .filter((q) => q.eq(q.field("isFeatured"), true))
+      .order("desc")
+      .take(limit);
 }
 
 /**
@@ -53,49 +49,42 @@ export async function getReviewsByService(
   approvedOnly: boolean = true,
   limit: number = 50
 ) {
-  let query = ctx.db
+  const query = ctx.db
     .query("reviews")
     .withIndex("by_service", (q) => q.eq("serviceId", serviceId));
   
-  if (approvedOnly) {
-    query = query.withIndex("by_approved", (q) => q.eq("isApproved", true));
-  }
-  
-  const reviews = await query.order("desc").take(limit);
-  return reviews;
-}
-
-/**
- * Get all reviews for admin (including unapproved)
- */
-export async function getAllReviews(ctx: QueryCtx, limit: number = 100) {
-  const reviews = await ctx.db
+  const query = ctx.db
     .query("reviews")
-    .order("desc")
-    .take(limit);
+    .withIndex("by_service", (q) => q.eq("serviceId", serviceId));
   
-  return reviews;
+  const filteredQuery = approvedOnly
+    ? query.filter((q) => q.eq(q.field("isApproved"), true))
+    : query;
+  
+  return await filteredQuery.order("desc").take(limit);
+export async function getAllReviews(ctx: QueryCtx, limit: number = 100) {
+  return await ctx.db
+      .query("reviews")
+      .order("desc")
+      .take(limit);
 }
 
 /**
  * Get pending reviews for admin approval
  */
 export async function getPendingReviews(ctx: QueryCtx, limit: number = 50) {
-  const reviews = await ctx.db
-    .query("reviews")
-    .withIndex("by_approved", (q) => q.eq("isApproved", false))
-    .order("desc")
-    .take(limit);
-  
-  return reviews;
+  return await ctx.db
+      .query("reviews")
+      .withIndex("by_approved", (q) => q.eq("isApproved", false))
+      .order("desc")
+      .take(limit);
 }
 
 /**
  * Get review by ID
  */
 export async function getReviewById(ctx: QueryCtx, reviewId: string) {
-  const review = await ctx.db.get(reviewId);
-  return review;
+  return await ctx.db.get(reviewId);
 }
 
 /**
@@ -331,14 +320,12 @@ export async function getReviewsByRating(
   rating: number,
   limit: number = 50
 ) {
-  const reviews = await ctx.db
-    .query("reviews")
-    .withIndex("by_rating", (q) => q.eq("rating", rating))
-    .filter((q) => q.eq(q.field("isApproved"), true))
-    .order("desc")
-    .take(limit);
-  
-  return reviews;
+  return await ctx.db
+      .query("reviews")
+      .withIndex("by_rating", (q) => q.eq("rating", rating))
+      .filter((q) => q.eq(q.field("isApproved"), true))
+      .order("desc")
+      .take(limit);
 }
 
 /**

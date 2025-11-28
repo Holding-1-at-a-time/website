@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { services, getServicesByCategory } from "@/lib/data";
+import { useServices } from "@/hooks/useConvex";
 import { ArrowRight, CheckCircle, Clock, DollarSign, MapPin, Star } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -20,8 +20,21 @@ export const metadata: Metadata = {
 };
 
 export default function ServicesPage() {
-    const primaryServices = getServicesByCategory('primary');
-    const additionalServices = getServicesByCategory('additional');
+    // Fetch services from Convex backend
+    const { services: primaryServices, isLoading: primaryLoading } = useServices({ category: 'primary', isActive: true });
+    const { services: additionalServices, isLoading: additionalLoading } = useServices({ category: 'additional', isActive: true });
+
+    // Show loading state
+    if (primaryLoading && additionalLoading) {
+        return (
+            <div className="flex items-center justify-center min-h-[50vh]">
+                <div className="text-center space-y-4">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+                    <p className="text-muted-foreground">Loading services...</p>
+                </div>
+            </div>
+        );
+    }
 
     const jsonLd = {
         "@context": "https://schema.org",
@@ -120,62 +133,70 @@ export default function ServicesPage() {
                                 Comprehensive auto detailing services to keep your vehicle looking its best
                             </p>
                         </div>
+                        
+                        {/* Primary Services Grid */}
                         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                            {primaryServices.map((service) => (
-                                <Card key={service.id} className="group hover:shadow-lg transition-shadow">
-                                    <CardContent className="p-6">
-                                        <div className="space-y-4">
-                                            <div className="flex items-center justify-between">
-                                                <h3 className="text-xl font-semibold">{service.name}</h3>
-                                                <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">Premium</span>
-                                            </div>
-                                            
-                                            <p className="text-muted-foreground">{service.description}</p>
-                                            
-                                            <div className="flex items-center gap-4 text-sm">
-                                                <div className="flex items-center gap-1">
-                                                    <DollarSign className="h-4 w-4 text-primary" />
-                                                    <span className="font-semibold">{service.price}</span>
+                            {primaryServices && primaryServices.length > 0 ? (
+                                primaryServices.map((service) => (
+                                    <Card key={service._id} className="group hover:shadow-lg transition-shadow">
+                                        <CardContent className="p-6">
+                                            <div className="space-y-4">
+                                                <div className="flex items-center justify-between">
+                                                    <h3 className="text-xl font-semibold">{service.name}</h3>
+                                                    <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">Premium</span>
                                                 </div>
-                                                <div className="flex items-center gap-1">
-                                                    <Clock className="h-4 w-4 text-primary" />
-                                                    <span>{service.duration}</span>
+                                                
+                                                <p className="text-muted-foreground">{service.description}</p>
+                                                
+                                                <div className="flex items-center gap-4 text-sm">
+                                                    <div className="flex items-center gap-1">
+                                                        <DollarSign className="h-4 w-4 text-primary" />
+                                                        <span className="font-semibold">{service.price}</span>
+                                                    </div>
+                                                    <div className="flex items-center gap-1">
+                                                        <Clock className="h-4 w-4 text-primary" />
+                                                        <span>{service.duration}</span>
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <div className="space-y-2">
-                                                <p className="font-medium text-sm">What's Included:</p>
-                                                <ul className="text-sm text-muted-foreground space-y-1">
-                                                    {service.features.slice(0, 3).map((feature, idx) => (
-                                                        <li key={idx} className="flex items-center gap-2">
-                                                            <CheckCircle className="h-3 w-3 text-primary flex-shrink-0" />
-                                                            <span>{feature}</span>
-                                                        </li>
-                                                    ))}
-                                                    {service.features.length > 3 && (
-                                                        <li className="text-primary text-xs">
-                                                            +{service.features.length - 3} more features
-                                                        </li>
-                                                    )}
-                                                </ul>
-                                            </div>
+                                                <div className="space-y-2">
+                                                    <p className="font-medium text-sm">What's Included:</p>
+                                                    <ul className="text-sm text-muted-foreground space-y-1">
+                                                        {service.features.slice(0, 3).map((feature, idx) => (
+                                                            <li key={idx} className="flex items-center gap-2">
+                                                                <CheckCircle className="h-3 w-3 text-primary flex-shrink-0" />
+                                                                <span>{feature}</span>
+                                                            </li>
+                                                        ))}
+                                                        {service.features.length > 3 && (
+                                                            <li className="text-primary text-xs">
+                                                                +{service.features.length - 3} more features
+                                                            </li>
+                                                        )}
+                                                    </ul>
+                                                </div>
 
-                                            <Button asChild className="w-full">
-                                                <Link href={`/services/${service.slug}`}>
-                                                    Learn More
-                                                    <ArrowRight className="ml-2 h-4 w-4" />
-                                                </Link>
-                                            </Button>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            ))}
+                                                <Button asChild className="w-full">
+                                                    <Link href={`/services/${service.slug}`}>
+                                                        Learn More
+                                                        <ArrowRight className="ml-2 h-4 w-4" />
+                                                    </Link>
+                                                </Button>
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                ))
+                            ) : (
+                                <div className="col-span-full text-center py-8">
+                                    <p className="text-muted-foreground">No primary services available at this time.</p>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </section>
 
                 {/* Additional Services Section */}
-                {additionalServices.length > 0 && (
+                {additionalServices && additionalServices.length > 0 && (
                     <section className="py-16 bg-muted/50">
                         <div className="container">
                             <div className="text-center mb-12">
@@ -186,7 +207,7 @@ export default function ServicesPage() {
                             </div>
                             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                                 {additionalServices.map((service) => (
-                                    <Card key={service.id} className="group hover:shadow-lg transition-shadow">
+                                    <Card key={service._id} className="group hover:shadow-lg transition-shadow">
                                         <CardContent className="p-6">
                                             <div className="space-y-4">
                                                 <div className="flex items-center justify-between">

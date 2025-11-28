@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { getServiceBySlug, services } from "@/lib/data";
+import { useServiceBySlug } from "@/hooks/useConvex";
 import { ArrowRight, CheckCircle, Clock, DollarSign, MapPin, Phone } from "lucide-react";
 import { notFound } from "next/navigation";
 
@@ -22,26 +22,11 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = params;
-  const service = getServiceBySlug(slug);
-
-  if (!service) {
-    return {
-      title: "Service Not Found",
-    };
-  }
-
+  // For server-side metadata generation, we'll use a default approach
+  // since we can't call hooks in generateMetadata
   return {
-    title: service.title,
-    description: service.metaDescription,
-    openGraph: {
-      title: service.title,
-      description: service.metaDescription,
-      type: "website",
-      url: `https://1detailatatime.com/services/${slug}`,
-    },
-    alternates: {
-      canonical: `https://1detailatatime.com/services/${slug}`,
-    },
+    title: `${slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')} | One Detail At A Time`,
+    description: `Professional ${slug} services in San Antonio, TX. IDA certified auto detailing with valet service available.`,
   };
 }
 
@@ -56,18 +41,26 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
  * Additionally, it renders a process section with the service's process steps and a service areas section with the areas served by the service.
  * Finally, it renders a call-to-action (CTA) section with a link to book the service and a link to get a free quote.
  */
-export default async function ServicePage({ params }: PageProps) {
+export default function ServicePage({ params }: PageProps) {
   const { slug } = params;
-  const service =  getServiceBySlug(slug);
+  const { service, isLoading } = useServiceBySlug(slug);
   
-  
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <div className="text-center space-y-4">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+          <p className="text-muted-foreground">Loading service...</p>
+        </div>
+      </div>
+    );
+  }
 
+  // Handle service not found
   if (!service) {
     notFound();
   }
-
-  const metadata = await generateMetadata({ params });
-
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -159,7 +152,7 @@ export default async function ServicePage({ params }: PageProps) {
 
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Button size="lg" asChild>
-                    <Link href="/booking">
+                    <Link href={`/booking?service=${service.slug}`}>
                       Book This Service
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </Link>
@@ -201,41 +194,45 @@ export default async function ServicePage({ params }: PageProps) {
         </section>
 
         {/* Benefits Section */}
-        <section className="py-16 bg-muted/50">
-          <div className="container">
-            <h2 className="text-3xl font-bold mb-8">Why Choose Our {service.name}?</h2>
-            <div className="grid gap-6 md:grid-cols-3">
-              {service.benefits.map((benefit, idx) => (
-                <Card key={idx}>
-                  <CardContent className="p-6">
-                    <CheckCircle className="h-8 w-8 text-primary mb-4" />
-                    <p className="font-medium">{benefit}</p>
-                  </CardContent>
-                </Card>
-              ))}
+        {service.benefits && service.benefits.length > 0 && (
+          <section className="py-16 bg-muted/50">
+            <div className="container">
+              <h2 className="text-3xl font-bold mb-8">Why Choose Our {service.name}?</h2>
+              <div className="grid gap-6 md:grid-cols-3">
+                {service.benefits.map((benefit, idx) => (
+                  <Card key={idx}>
+                    <CardContent className="p-6">
+                      <CheckCircle className="h-8 w-8 text-primary mb-4" />
+                      <p className="font-medium">{benefit}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* Process Section */}
-        <section className="py-16">
-          <div className="container">
-            <h2 className="text-3xl font-bold mb-8 text-center">Our Process</h2>
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-              {service.process.map((step) => (
-                <div key={step.step} className="relative">
-                  <div className="flex flex-col items-center text-center space-y-4">
-                    <div className="w-16 h-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold">
-                      {step.step}
+        {service.process && service.process.length > 0 && (
+          <section className="py-16">
+            <div className="container">
+              <h2 className="text-3xl font-bold mb-8 text-center">Our Process</h2>
+              <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+                {service.process.map((step) => (
+                  <div key={step.step} className="relative">
+                    <div className="flex flex-col items-center text-center space-y-4">
+                      <div className="w-16 h-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold">
+                        {step.step}
+                      </div>
+                      <h3 className="text-xl font-semibold">{step.title}</h3>
+                      <p className="text-muted-foreground">{step.description}</p>
                     </div>
-                    <h3 className="text-xl font-semibold">{step.title}</h3>
-                    <p className="text-muted-foreground">{step.description}</p>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* Service Areas */}
         <section className="py-16 bg-muted/50">
@@ -268,7 +265,7 @@ export default async function ServicePage({ params }: PageProps) {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button size="lg" variant="secondary" asChild>
-                  <Link href="/booking">
+                  <Link href={`/booking?service=${service.slug}`}>
                     Schedule Now
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>

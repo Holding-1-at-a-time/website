@@ -11,9 +11,14 @@ import { BookingData, BookingFilters, BookingUpdateData } from "../types";
 /**
  * Get booking by ID with validation
  */
-export async function getBookingById(ctx: QueryCtx, bookingId: string) {
-  const booking = await ctx.db.get(bookingId);
-  return booking;
+export async function getBookingById(ctx: QueryCtx, bookingId: string): Promise<BookingData | null> {
+  try {
+    const booking = await ctx.db.get(bookingId as any);
+    return booking as BookingData | null;
+  } catch (error) {
+    console.error("Error getting booking:", error);
+    return null;
+  }
 }
 
 /**
@@ -22,13 +27,13 @@ export async function getBookingById(ctx: QueryCtx, bookingId: string) {
 export async function getBookingsWithFilters(
   ctx: QueryCtx,
   filters: BookingFilters
-) {
+): Promise<BookingData[]> {
   let query = ctx.db.query("bookings");
   
   // Filter by customer email (for customer access to their own bookings)
   if (filters.customerEmail) {
     query = query.withIndex("by_customer_email", (q) =>
-      q.eq("customerEmail", filters.customerEmail)
+      q.eq("customerEmail", filters.customerEmail!)
     );
   }
   
@@ -40,7 +45,7 @@ export async function getBookingsWithFilters(
   const limit = filters.limit || 50;
   const bookings = await query.order("desc").take(limit);
   
-  return bookings;
+  return bookings as BookingData[];
 }
 
 /**
@@ -50,14 +55,14 @@ export async function getBookingsByService(
   ctx: QueryCtx,
   serviceId: string,
   limit: number = 100
-) {
+): Promise<BookingData[]> {
   const bookings = await ctx.db
     .query("bookings")
-    .withIndex("by_serviceId", (q) => q.eq("serviceId", serviceId))
+    .withIndex("by_serviceId", (q) => q.eq("serviceId", serviceId as any))
     .order("desc")
     .take(limit);
   
-  return bookings;
+  return bookings as BookingData[];
 }
 
 /**
@@ -68,22 +73,22 @@ export async function getBookingsByDateRange(
   startDate: string,
   endDate: string,
   limit: number = 1000
-) {
+): Promise<BookingData[]> {
   const bookings = await ctx.db
     .query("bookings")
-    .withIndex("by_date", (q) => 
+    .withIndex("by_date", (q) =>
       q.gte("preferredDate", startDate).lte("preferredDate", endDate)
     )
     .order("asc")
     .take(limit);
   
-  return bookings;
+  return bookings as BookingData[];
 }
 
 /**
  * Get today's bookings (for admin dashboard)
  */
-export async function getTodaysBookings(ctx: QueryCtx) {
+export async function getTodaysBookings(ctx: QueryCtx): Promise<BookingData[]> {
   const today = new Date().toISOString().split('T')[0];
   
   const bookings = await ctx.db
@@ -92,26 +97,27 @@ export async function getTodaysBookings(ctx: QueryCtx) {
     .order("asc")
     .take(100);
   
-  return bookings;
+  return bookings as BookingData[];
 }
 
 /**
  * Check for booking conflicts (same date and time)
  */
 export async function checkBookingConflict(
-  ctx: QueryCtx,
-  date: string,
-  time: string,
-  excludeBookingId?: string
-) {
   const conflictingBookings = await ctx.db
     .query("bookings")
     .withIndex("by_date", (q) => q.eq("preferredDate", date))
     .filter((q) => q.eq(q.field("preferredTime"), time))
     .take(50);
   
-  // Filter out the booking being updated (if any)
-  const activeConflicts = excludeBookingId 
+  // Filter out cancelled/completed bookings and the booking being updated
+  const activeConflicts = conflictingBookings.filter(b => 
+    b._id !== excludeBookingId && 
+    !["cancelled", "completed"].includes(b.status)
+  );
+  
+  return activeConflicts.length > 0;
+  const activeConflicts = excludeBookingId
     ? conflictingBookings.filter(b => b._id !== excludeBookingId)
     : conflictingBookings;
   
@@ -201,20 +207,14 @@ export async function updateBooking(
   
   // If updating serviceId, validate the service exists
   if (updates.serviceId && updates.serviceId !== existingBooking.serviceId) {
-    const service = await ctx.db.get(updates.serviceId);
-    if (!service) {
-      throw new Error("Selected service not found");
-    }
-  }
-  
-  // Prepare update data
+  // Spread updates first, then apply server-controlled timestamps
   const updateData: BookingUpdateData = {
-    updatedAt: Date.now(),
     ...updates,
+    updatedAt: Date.now(),
+    ...(updates.status === "confirmed" && { confirmedAt: Date.now() }),
+    ...(updates.status === "completed" && { completedAt: Date.now() }),
+    ...(updates.status === "cancelled" && { cancelledAt: Date.now() }),
   };
-  
-  // Set status-specific timestamps
-  if (updates.status === "confirmed") {
     updateData.confirmedAt = Date.now();
   } else if (updates.status === "completed") {
     updateData.completedAt = Date.now();
@@ -291,21 +291,16 @@ export async function getBookingStats(ctx: QueryCtx) {
     in_progress: statusCounts.in_progress,
     completed: statusCounts.completed,
     cancelled: statusCounts.cancelled,
-  };
-}
-
-/**
- * Get available time slots for a specific date and service
- */
 export async function getAvailableTimeSlots(
   ctx: QueryCtx,
   date: string,
-  serviceId: string
+  _serviceId?: string // Mark unused or implement service-specific logic
 ): Promise<string[]> {
   // Get existing bookings for the date
   const existingBookings = await ctx.db
     .query("bookings")
     .withIndex("by_date", (q) => q.eq("preferredDate", date))
+    .filter((q) => q.neq(q.field("status"), "cancelled"))
     .take(100);
   
   const bookedTimes = existingBookings.map(b => b.preferredTime);
@@ -319,11 +314,18 @@ export async function getAvailableTimeSlots(
   // Return available slots (not booked)
   return businessHours.filter(time => !bookedTimes.includes(time));
 }
-
+    "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM"
+  ];
+  
+  // Return available slots (not booked)
+  return businessHours.filter(time => !bookedTimes.includes(time));
+}
 /**
  * Check if user has access to admin functions
  */
-export async function checkAdminAccess(ctx: QueryCtx | MutationCtx): Promise<{ userId: string; role: string }> {
+export async function checkAdminAccess(
+  ctx: QueryCtx | MutationCtx
+): Promise<{ userId: string; role: string }> {
   const user = await ctx.auth.getUserIdentity();
   if (!user) {
     throw new Error("User not authenticated");
@@ -333,7 +335,11 @@ export async function checkAdminAccess(ctx: QueryCtx | MutationCtx): Promise<{ u
     throw new Error("Only admins can perform this action");
   }
   
-  return { userId: user.userId || "", role: user.role || "" };
+  // Ensure userId and role are strings for consistent return type
+  const userId = typeof user.userId === 'string' ? user.userId : '';
+  const role = typeof user.role === 'string' ? user.role : '';
+  
+  return { userId, role };
 }
 
 /**
@@ -348,7 +354,7 @@ async function logBookingActivity(
   try {
     await ctx.db.insert("activityLog", {
       action,
-      bookingId: bookingId,
+      bookingId: bookingId as any,
       timestamp: Date.now(),
       metadata,
     });
@@ -386,3 +392,4 @@ export const bookingDataValidator = v.object({
   )),
   notes: v.optional(v.string()),
 });
+

@@ -1,5 +1,5 @@
-import { MutationCtx, QueryCtx } from "../_generated/server";
 import { v } from "convex/values";
+import { MutationCtx, QueryCtx } from "../_generated/server";
 
 /**
  * Service business logic - separated from API functions
@@ -29,10 +29,10 @@ export interface ServiceData {
  */
 export async function getActiveServices(ctx: QueryCtx) {
   return await ctx.db
-      .query("services")
-      .withIndex("by_isActive", (q) => q.eq("isActive", true))
-      .order("asc")
-      .take(100);
+    .query("services")
+    .withIndex("by_isActive", (q) => q.eq("isActive", true))
+    .order("asc")
+    .take(100);
 }
 
 /**
@@ -40,21 +40,21 @@ export async function getActiveServices(ctx: QueryCtx) {
  * Uses proper indexes for performance
  */
 export async function getServicesWithFilters(
-  ctx: QueryCtx, 
+  ctx: QueryCtx,
   filters: { category?: "primary" | "additional"; isActive?: boolean; limit?: number }
 ) {
   let query = ctx.db.query("services");
-  
+
   // Apply category filter using index
   if (filters.category) {
     query = query.withIndex("by_category", (q) => q.eq("category", filters.category));
   }
-  
+
   // Apply active status filter
   if (filters.isActive !== undefined) {
     query = query.withIndex("by_isActive", (q) => q.eq("isActive", filters.isActive));
   }
-  
+
   const limit = filters.limit || 50; // Default limit to prevent large results
   return await query.order("asc").take(limit);
 }
@@ -63,16 +63,16 @@ export async function getServicesWithFilters(
  * Get services by category using compound index
  */
 export async function getServicesByCategory(
-  ctx: QueryCtx, 
+  ctx: QueryCtx,
   category: "primary" | "additional"
 ) {
   return await ctx.db
-      .query("services")
-      .withIndex("by_category_and_active", (q) => 
-        q.eq("category", category).eq("isActive", true)
-      )
-      .order("asc")
-      .take(100);
+    .query("services")
+    .withIndex("by_category_and_active", (q) =>
+      q.eq("category", category).eq("isActive", true)
+    )
+    .order("asc")
+    .take(100);
 }
 
 /**
@@ -90,7 +90,7 @@ export async function getServiceBySlug(ctx: QueryCtx, slug: string) {
     .query("services")
     .withIndex("by_slug", (q) => q.eq("slug", slug))
     .take(1);
-  
+
   return services.length > 0 ? services[0] : null;
 }
 
@@ -98,7 +98,7 @@ export async function getServiceBySlug(ctx: QueryCtx, slug: string) {
  * Create a new service
  */
 export async function createService(
-  ctx: MutationCtx, 
+  ctx: MutationCtx,
   serviceData: ServiceData
 ): Promise<string> {
   // Check for existing slug
@@ -112,12 +112,12 @@ export async function createService(
   }
 
   return await ctx.db.insert("services", {
-      ...serviceData,
-      isActive: serviceData.isActive ?? true,
-      sortOrder: serviceData.sortOrder ?? 0,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-    });
+    ...serviceData,
+    isActive: serviceData.isActive ?? true,
+    sortOrder: serviceData.sortOrder ?? 0,
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
+  });
 }
 
 /**
@@ -244,11 +244,11 @@ export async function checkAdminAccess(ctx: QueryCtx | MutationCtx): Promise<{ u
   if (!user) {
     throw new Error("User not authenticated");
   }
-  
+
   if (user.role !== "admin") {
     throw new Error("Only admins can perform this action");
   }
-  
+
   return { userId: user.userId || "", role: user.role || "" };
 }
 

@@ -4,6 +4,9 @@ import { v, Infer } from "convex/values";
 /**
  * Centralized type definitions for the Convex backend
  * This provides a single source of truth for all data types
+ *
+ * Note: Convex IDs are represented as strings in interfaces but actual
+ * database operations use generated Id<"table"> types from schema.ts
  */
 
 // ===== SERVICE TYPES =====
@@ -31,6 +34,8 @@ export interface ServiceData {
 }
 
 export type PartialServiceData = Partial<Omit<ServiceData, "_id" | "createdAt" | "updatedAt">>;
+export type ServiceCreateData = Omit<ServiceData, "_id" | "createdAt" | "updatedAt">;
+export type ServiceUpdateData = Partial<ServiceCreateData> & { updatedAt?: number };
 
 // ===== BOOKING TYPES =====
 export interface BookingData {
@@ -79,7 +84,20 @@ export interface BookingUpdateData {
   confirmedAt?: number;
   completedAt?: number;
   cancelledAt?: number;
-  updatedAt: number;
+  updatedAt?: number;
+}
+
+export interface BookingCreateData {
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  serviceId: string;
+  preferredDate: string;
+  preferredTime: string;
+  vehicleType: BookingData["vehicleType"];
+  message?: string;
+  status?: BookingData["status"];
+  notes?: string;
 }
 
 // ===== REVIEW TYPES =====
@@ -110,83 +128,20 @@ export interface ReviewUpdateData {
   rating?: number;
   isApproved?: boolean;
   isFeatured?: boolean;
-  updatedAt: number;
+  updatedAt?: number;
 }
 
-// ===== CUSTOMER TYPES =====
-export interface CustomerData {
-  _id: string;
-  name: string;
-  email: string;
-  phone: string;
-  address?: {
-    street: string;
-    city: string;
-    state: string;
-    zipCode: string;
-  };
-  vehicleInfo?: Array<{
-    type: string;
-    make: string;
-    model: string;
-    year: number;
-  }>;
-  notes?: string;
-  createdAt: number;
-  updatedAt: number;
-}
-
-// ===== ADMIN USER TYPES =====
-export interface AdminUserData {
-  _id: string;
-  email: string;
-  name: string;
-  role: "admin" | "staff";
-  permissions: string[];
-  isActive: boolean;
-  lastLogin?: number;
-  createdAt: number;
-  updatedAt: number;
-}
-
-// ===== BUSINESS SETTINGS TYPES =====
-export interface BusinessSettingsData {
-  _id: string;
-  key: string;
-  value: string;
-  description?: string;
-  category?: string;
-  isPublic: boolean;
-  updatedAt: number;
-}
-
-// ===== SESSION TYPES =====
-export interface SessionData {
-  _id: string;
-  sessionId: string;
-  userId: string;
-  expiresAt: number;
-  createdAt: number;
-  lastAccessed: number;
-  metadata: {
-    userAgent?: string;
-    ipAddress?: string;
-  };
-}
-
-// ===== ACTIVITY LOG TYPES =====
-export interface ActivityLogData {
-  _id: string;
-  action: string;
-  userId?: string;
-  bookingId?: string;
-  customerEmail?: string;
-  timestamp: number;
-  metadata: Record<string, unknown>;
+export interface ReviewCreateData {
+  customerName: string;
+  rating: number;
+  comment: string;
+  serviceId: string;
+  date?: string;
 }
 
 // ===== CONTEXT TYPES =====
 export type ContextType = QueryCtx | MutationCtx;
+export type ConvexId<T extends string> = string; // Abstract representation for documentation
 
 export interface UserContext {
   _id: string;
