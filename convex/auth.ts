@@ -258,3 +258,8 @@ export function formatErrorMessage(error: unknown): string {
   
   return "An unexpected error occurred";
 }
+
+// Handle Convex errors (alias for formatErrorMessage for compatibility)
+export function handleConvexError(error: unknown): string {
+  return formatErrorMessage(error);
+}

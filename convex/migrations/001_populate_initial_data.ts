@@ -1,4 +1,4 @@
-import { defineMigration } from "@convex-dev/migrations";
+import { internalMutation } from "../_generated/server";
 import { ConvexError } from "convex/values";
 
 // Initial service data from the existing static data
@@ -330,124 +330,92 @@ const initialReviews = [
   }
 ];
 
-export default defineMigration({
-  name: "populate_initial_data",
-  up: async (ctx) => {
-    console.log("Starting initial data population...");
+export const populateInitialData = internalMutation(async (ctx) => {
+  console.log("Starting initial data population...");
 
-    // Create services
-    console.log("Creating services...");
-    for (const serviceData of initialServices) {
-      const serviceId = await ctx.db.insert("services", {
-        ...serviceData,
-        isActive: true,
-        sortOrder: initialServices.indexOf(serviceData),
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-      });
-      console.log(`Created service: ${serviceData.name} (ID: ${serviceId})`);
-    }
-
-    // Create reviews (after services are created)
-    console.log("Creating reviews...");
-    for (const reviewData of initialReviews) {
-      // Find service by slug
-      const services = await ctx.db.query("services")
-        .filter((q: any) => q.eq(q.field("slug"), reviewData.serviceSlug))
-        .collect();
-      
-      if (services.length > 0) {
-        const serviceId = services[0]._id;
-        
-        await ctx.db.insert("reviews", {
-          customerName: reviewData.customerName,
-          rating: reviewData.rating,
-          comment: reviewData.comment,
-          serviceId: serviceId,
-          isApproved: true,
-          isFeatured: reviewData.rating >= 5,
-          date: reviewData.date,
-          createdAt: Date.now(),
-          updatedAt: Date.now(),
-        });
-        console.log(`Created review: ${reviewData.customerName} for ${reviewData.serviceSlug}`);
-      }
-    }
-
-    // Create admin user
-    console.log("Creating admin user...");
-    const adminUserId = await ctx.db.insert("adminUsers", {
-      userId: "admin_demo",
-      email: "admin@1detailatatime.com",
-      name: "Business Owner",
-      role: "admin",
-      permissions: [
-        "bookings:read", "bookings:write", "bookings:delete",
-        "customers:read", "customers:write",
-        "services:read", "services:write",
-        "reviews:read", "reviews:write", "reviews:moderate",
-        "admin:manage", "settings:manage"
-      ],
+  // Create services
+  console.log("Creating services...");
+  for (const serviceData of initialServices) {
+    const serviceId = await ctx.db.insert("services", {
+      ...serviceData,
       isActive: true,
+      sortOrder: initialServices.indexOf(serviceData),
       createdAt: Date.now(),
       updatedAt: Date.now(),
     });
-    console.log(`Created admin user: admin@1detailatatime.com (ID: ${adminUserId})`);
+    console.log(`Created service: ${serviceData.name} (ID: ${serviceId})`);
+  }
 
-    // Create business settings
-    console.log("Creating business settings...");
-    const settings = [
-      { key: "business_name", value: "One Detail At A Time LLC", description: "Official business name" },
-      { key: "business_phone", value: "(726) 207-1007", description: "Primary business phone number" },
-      { key: "business_email", value: "rromerojr1@gmail.com", description: "Primary business email" },
-      { key: "business_address", value: "11692 Bricken Circle, San Antonio, TX 78233", description: "Business address" },
-      { key: "booking_advance_days", value: "30", description: "Maximum days in advance for booking" },
-      { key: "valet_service_fee", value: "50", description: "Additional fee for valet service in dollars" },
-      { key: "business_hours_start", value: "7", description: "Business hours start time (24-hour format)" },
-      { key: "business_hours_end", value: "22", description: "Business hours end time (24-hour format)" },
-    ];
-
-    for (const setting of settings) {
-      await ctx.db.insert("businessSettings", {
-        key: setting.key,
-        value: setting.value,
-        description: setting.description,
-        updatedAt: Date.now(),
-        updatedBy: adminUserId,
-      });
-      console.log(`Created setting: ${setting.key} = ${setting.value}`);
-    }
-
-    console.log("Initial data population completed successfully!");
-  },
-  down: async (ctx) => {
-    console.log("Rolling back initial data population...");
+  // Create reviews (after services are created)
+  console.log("Creating reviews...");
+  for (const reviewData of initialReviews) {
+    // Find service by slug
+    const services = await ctx.db.query("services")
+      .filter((q: any) => q.eq(q.field("slug"), reviewData.serviceSlug))
+      .collect();
     
-    // Delete all data in reverse order to handle dependencies
-    const businessSettings = await ctx.db.query("businessSettings").collect();
-    for (const setting of businessSettings) {
-      await ctx.db.delete(setting._id);
+    if (services.length > 0) {
+      const serviceId = services[0]._id;
+      
+      await ctx.db.insert("reviews", {
+        customerName: reviewData.customerName,
+        rating: reviewData.rating,
+        comment: reviewData.comment,
+        serviceId: serviceId,
+        isApproved: true,
+        isFeatured: reviewData.rating >= 5,
+        date: reviewData.date,
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+      });
+      console.log(`Created review: ${reviewData.customerName} for ${reviewData.serviceSlug}`);
     }
-    console.log(`Deleted ${businessSettings.length} business settings`);
+  }
 
-    const reviews = await ctx.db.query("reviews").collect();
-    for (const review of reviews) {
-      await ctx.db.delete(review._id);
-    }
-    console.log(`Deleted ${reviews.length} reviews`);
+  // Create admin user
+  console.log("Creating admin user...");
+  const adminUserId = await ctx.db.insert("adminUsers", {
+    userId: "admin_demo",
+    email: "admin@1detailatatime.com",
+    name: "Business Owner",
+    role: "admin",
+    permissions: [
+      "bookings:read", "bookings:write", "bookings:delete",
+      "customers:read", "customers:write",
+      "services:read", "services:write",
+      "reviews:read", "reviews:write", "reviews:moderate",
+      "admin:manage", "settings:manage"
+    ],
+    isActive: true,
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
+  });
+  console.log(`Created admin user: admin@1detailatatime.com (ID: ${adminUserId})`);
 
-    const services = await ctx.db.query("services").collect();
-    for (const service of services) {
-      await ctx.db.delete(service._id);
-    }
-    console.log(`Deleted ${services.length} services`);
+  // Create business settings
+  console.log("Creating business settings...");
+  const settings = [
+    { key: "business_name", value: "One Detail At A Time LLC", description: "Official business name" },
+    { key: "business_phone", value: "(726) 207-1007", description: "Primary business phone number" },
+    { key: "business_email", value: "rromerojr1@gmail.com", description: "Primary business email" },
+    { key: "business_address", value: "11692 Bricken Circle, San Antonio, TX 78233", description: "Business address" },
+    { key: "booking_advance_days", value: "30", description: "Maximum days in advance for booking" },
+    { key: "valet_service_fee", value: "50", description: "Additional fee for valet service in dollars" },
+    { key: "business_hours_start", value: "7", description: "Business hours start time (24-hour format)" },
+    { key: "business_hours_end", value: "22", description: "Business hours end time (24-hour format)" },
+  ];
 
-    const adminUsers = await ctx.db.query("adminUsers").collect();
-    for (const admin of adminUsers) {
-      await ctx.db.delete(admin._id);
-    }
-    console.log(`Deleted ${adminUsers.length} admin users`);
+  for (const setting of settings) {
+    await ctx.db.insert("businessSettings", {
+      key: setting.key,
+      value: setting.value,
+      description: setting.description,
+      updatedAt: Date.now(),
+      updatedBy: adminUserId,
+    });
+    console.log(`Created setting: ${setting.key} = ${setting.value}`);
+  }
 
-    console.log("Initial data rollback completed.");
-  },
+  console.log("Initial data population completed successfully!");
+  return { success: true, message: "Database seeded successfully with initial data" };
 });

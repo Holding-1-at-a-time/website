@@ -8,9 +8,18 @@
  * @module
  */
 
+import type * as api_bookings from "../api/bookings.js";
+import type * as api_reviews from "../api/reviews.js";
+import type * as api_services from "../api/services.js";
 import type * as auth from "../auth.js";
 import type * as functions_bookings from "../functions/bookings.js";
+import type * as functions_seed from "../functions/seed.js";
 import type * as functions_services from "../functions/services.js";
+import type * as migrations_001_populate_initial_data from "../migrations/001_populate_initial_data.js";
+import type * as model_bookings from "../model/bookings.js";
+import type * as model_reviews from "../model/reviews.js";
+import type * as model_services from "../model/services.js";
+import type * as types from "../types.js";
 import type * as validators from "../validators.js";
 
 import type {
@@ -20,9 +29,18 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  "api/bookings": typeof api_bookings;
+  "api/reviews": typeof api_reviews;
+  "api/services": typeof api_services;
   auth: typeof auth;
   "functions/bookings": typeof functions_bookings;
+  "functions/seed": typeof functions_seed;
   "functions/services": typeof functions_services;
+  "migrations/001_populate_initial_data": typeof migrations_001_populate_initial_data;
+  "model/bookings": typeof model_bookings;
+  "model/reviews": typeof model_reviews;
+  "model/services": typeof model_services;
+  types: typeof types;
   validators: typeof validators;
 }>;
 
