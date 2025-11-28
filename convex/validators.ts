@@ -1,5 +1,46 @@
 import { v } from "convex/values";
 
+// TypeScript Interfaces derived from Convex schemas
+export interface BookingData {
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  serviceId: string; // Convex `v.id` resolves to string in TypeScript
+  preferredDate: string;
+  preferredTime: string;
+  vehicleType: "sedan" | "suv" | "truck" | "van" | "coupe" | "sports";
+  message?: string;
+  status?: "pending" | "confirmed" | "in_progress" | "completed" | "cancelled";
+}
+
+export interface ServiceData {
+  name: string;
+  slug: string;
+  category: "primary" | "additional";
+  title: string;
+  description: string;
+  metaDescription: string;
+  features: string[];
+  benefits: string[];
+  price: string;
+  duration: string;
+  process: Array<{
+    step: number;
+    title: string;
+    description: string;
+  }>;
+  isActive: boolean;
+  sortOrder: number;
+}
+
+export interface ReviewData {
+  customerName: string;
+  rating: number;
+  comment: string;
+  serviceId: string; // Convex `v.id` resolves to string in TypeScript
+  date: string;
+}
+
 // Data validation schemas using Convex validation system
 // Additional validation logic is implemented in the functions themselves
 
@@ -184,7 +225,7 @@ export function validatePrice(price: string): boolean {
 
 // Booking conflict detection
 export function validateBookingConflict(
-  existingBookings: any[],
+  existingBookings: BookingData[],
   newDate: string,
   newTime: string
 ): boolean {
@@ -197,7 +238,7 @@ export function validateBookingConflict(
 }
 
 // Enhanced validation functions with detailed error messages
-export function validateBookingData(data: any): { isValid: boolean; errors: string[] } {
+export function validateBookingData(data: BookingData): { isValid: boolean; errors: string[] } {
   const errors: string[] = [];
 
   if (!data.customerName || data.customerName.trim().length < 2) {
@@ -233,7 +274,7 @@ export function validateBookingData(data: any): { isValid: boolean; errors: stri
   };
 }
 
-export function validateServiceData(data: any): { isValid: boolean; errors: string[] } {
+export function validateServiceData(data: ServiceData): { isValid: boolean; errors: string[] } {
   const errors: string[] = [];
 
   if (!data.name || data.name.trim().length < 2) {
@@ -255,7 +296,7 @@ export function validateServiceData(data: any): { isValid: boolean; errors: stri
   };
 }
 
-export function validateReviewData(data: any): { isValid: boolean; errors: string[] } {
+export function validateReviewData(data: ReviewData): { isValid: boolean; errors: string[] } {
   const errors: string[] = [];
 
   if (!data.customerName || data.customerName.trim().length < 2) {

@@ -1,8 +1,6 @@
-import { ConvexError, v } from "convex/values";
-import { 
-  ValidationError, 
-  AuthorizationError, 
-  RateLimitError,
+import { ConvexError } from "convex/values";
+import { MutationCtx, QueryCtx } from "./_generated/server";
+import {
   sanitizeInput,
   validateEmail,
   validatePhone
@@ -49,26 +47,21 @@ export const ROLE_PERMISSIONS = {
 };
 
 // Get current authenticated user
-export async function getCurrentUser(ctx: any) {
+export async function getCurrentUser(ctx: QueryCtx | MutationCtx) {
   // For now, we'll implement a simple user check
   // In production, this would integrate with Convex auth
-  const userToken = ctx.headers.get("authorization")?.replace("Bearer ", "");
-  if (!userToken) return null;
+  const user = await ctx.auth.getUserIdentity();
+  if (!user) return null;
   
-  // Simple token validation (replace with proper auth in production)
-  if (userToken === "admin_token_demo") {
-    return {
-      _id: "admin_demo",
-      userId: "admin_demo",
-      email: "admin@1detailatatime.com",
-      name: "Demo Admin",
-      role: "admin" as const,
-      permissions: ROLE_PERMISSIONS.admin,
-      isActive: true,
-    };
-  }
-  
-  return null;
+  return {
+    _id: user._id,
+    userId: user.userId,
+    email: user.email,
+    name: user.name,
+    role: user.role as "admin" | "staff",
+    permissions: user.permissions || [],
+    isActive: user.isActive ?? true,
+  };
 }
 
 // Rate limiting function
@@ -90,7 +83,16 @@ export function rateLimit(key: string, limit: number, windowMs: number): boolean
 }
 
 // Input sanitization and validation
-export function sanitizeAndValidateBooking(data: any) {
+export function sanitizeAndValidateBooking(data: {
+  customerName?: string;
+  customerEmail?: string;
+  customerPhone?: string;
+  serviceId?: string;
+  preferredDate?: string;
+  preferredTime?: string;
+  vehicleType?: string;
+  message?: string;
+}) {
   // Sanitize inputs
   const sanitized = {
     customerName: sanitizeInput(data.customerName || ""),
@@ -123,8 +125,8 @@ export function sanitizeAndValidateBooking(data: any) {
   return sanitized;
 }
 
-// Session management (simplified)
-export async function createSession(ctx: any, userId: string) {
+// Session management (simplified) - Using MutationCtx for both operations
+export async function createSession(ctx: MutationCtx, userId: string) {
   const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   const expiresAt = Date.now() + 24 * 60 * 60 * 1000; // 24 hours
 
@@ -135,70 +137,75 @@ export async function createSession(ctx: any, userId: string) {
     createdAt: Date.now(),
     lastAccessed: Date.now(),
     metadata: {
-      userAgent: ctx.headers.get("user-agent") || "",
-      ipAddress: ctx.headers.get("x-forwarded-for") || ctx.headers.get("x-real-ip") || "",
+      userAgent: "", // Headers not available in mutations
+      ipAddress: "",
     },
   });
 
   return sessionId;
 }
 
-export async function validateSession(ctx: any, sessionId: string) {
+export async function validateSession(ctx: QueryCtx | MutationCtx, sessionId: string) {
   const session = await ctx.db
     .query("sessions")
-    .filter((q: any) => q.eq(q.field("sessionId"), sessionId))
+    .filter((q) => q.eq(q.field("sessionId"), sessionId))
     .unique();
 
   if (!session || session.expiresAt < Date.now()) {
-    if (session) {
-      await ctx.db.delete(session._id);
-    }
-    throw new ConvexError("Invalid or expired session");
+    // Return null instead of throwing to allow graceful handling
+    return null;
   }
 
-  // Update last accessed time
-  await ctx.db.patch(session._id, {
-    lastAccessed: Date.now(),
-  });
+  // Update last accessed time (only in MutationCtx)
+  if ("db" in ctx && "insert" in ctx.db) {
+    await ctx.db.patch(session._id, {
+      lastAccessed: Date.now(),
+    });
+  }
 
   return session;
 }
 
 // Activity logging
 export async function logActivity(
-  ctx: any, 
-  action: string, 
+  ctx: MutationCtx,
+  action: string,
   metadata: {
     userId?: string;
-    bookingId?: string;
+    bookingId?: any; // Using any temporarily to avoid schema conflicts
     customerEmail?: string;
     changes?: string;
   } = {}
 ) {
-  await ctx.db.insert("activityLog", {
-    action,
-    userId: metadata.userId,
-    bookingId: metadata.bookingId,
-    customerEmail: metadata.customerEmail,
-    timestamp: Date.now(),
-    metadata: {
-      userAgent: ctx.headers.get("user-agent") || "",
-      ipAddress: ctx.headers.get("x-forwarded-for") || ctx.headers.get("x-real-ip") || "",
-      changes: metadata.changes,
-    },
-  });
+  try {
+    await ctx.db.insert("activityLog", {
+      action,
+      userId: metadata.userId,
+      bookingId: metadata.bookingId,
+      customerEmail: metadata.customerEmail,
+      timestamp: Date.now(),
+      metadata: {
+        userAgent: "", // Headers not available in mutations
+        ipAddress: "",
+        changes: metadata.changes,
+      },
+    });
+  } catch (error) {
+    // Log activity failures shouldn't break the main operation
+    console.error("Failed to log activity:", error);
+  }
 }
 
 // Booking conflict detection
 export async function checkBookingConflicts(
-  ctx: any,
+  ctx: QueryCtx,
   date: string,
   time: string,
   excludeBookingId?: string
 ) {
   let query = ctx.db
     .query("bookings")
-    .filter((q: any) => 
+    .filter((q) => 
       q.and(
         q.eq(q.field("preferredDate"), date),
         q.eq(q.field("preferredTime"), time),
@@ -207,7 +214,7 @@ export async function checkBookingConflicts(
     );
 
   if (excludeBookingId) {
-    query = query.filter((q: any) => q.neq(q.field("_id"), excludeBookingId));
+    query = query.filter((q) => q.neq(q.field("_id"), excludeBookingId));
   }
 
   const conflictingBookings = await query.collect();
@@ -222,11 +229,10 @@ export function getSecurityHeaders() {
   return {
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "DENY",
-    "X-XSS-Protection": "1; mode=block",
     "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
     "Content-Security-Policy": [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-eval'",
+      "script-src 'self'",
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: https:",
       "connect-src 'self' wss: https:",
@@ -240,13 +246,13 @@ export function getSecurityHeaders() {
   };
 }
 
-// Error handling utility
-export function handleConvexError(error: any) {
+// Error message formatting
+export function formatErrorMessage(error: unknown): string {
   if (error instanceof ConvexError) {
     return error.message;
   }
   
-  if (error.message) {
+  if (error instanceof Error && error.message) {
     return error.message;
   }
   

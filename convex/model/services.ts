@@ -28,13 +28,11 @@ export interface ServiceData {
  * Using proper indexing and limiting as per Convex best practices
  */
 export async function getActiveServices(ctx: QueryCtx) {
-  const services = await ctx.db
-    .query("services")
-    .withIndex("by_isActive", (q) => q.eq("isActive", true))
-    .order("asc")
-    .take(100); // Limit results to prevent large collections
-  
-  return services;
+  return await ctx.db
+      .query("services")
+      .withIndex("by_isActive", (q) => q.eq("isActive", true))
+      .order("asc")
+      .take(100);
 }
 
 /**
@@ -58,9 +56,7 @@ export async function getServicesWithFilters(
   }
   
   const limit = filters.limit || 50; // Default limit to prevent large results
-  const services = await query.order("asc").take(limit);
-  
-  return services;
+  return await query.order("asc").take(limit);
 }
 
 /**
@@ -70,23 +66,20 @@ export async function getServicesByCategory(
   ctx: QueryCtx, 
   category: "primary" | "additional"
 ) {
-  const services = await ctx.db
-    .query("services")
-    .withIndex("by_category_and_active", (q) => 
-      q.eq("category", category).eq("isActive", true)
-    )
-    .order("asc")
-    .take(100); // Limit results
-  
-  return services;
+  return await ctx.db
+      .query("services")
+      .withIndex("by_category_and_active", (q) => 
+        q.eq("category", category).eq("isActive", true)
+      )
+      .order("asc")
+      .take(100);
 }
 
 /**
  * Get service by ID with validation
  */
 export async function getServiceById(ctx: QueryCtx, serviceId: string) {
-  const service = await ctx.db.get(serviceId as any);
-  return service;
+  return await ctx.db.get(serviceId);
 }
 
 /**
@@ -118,15 +111,13 @@ export async function createService(
     throw new Error("A service with this slug already exists");
   }
 
-  const serviceId = await ctx.db.insert("services", {
-    ...serviceData,
-    isActive: serviceData.isActive ?? true,
-    sortOrder: serviceData.sortOrder ?? 0,
-    createdAt: Date.now(),
-    updatedAt: Date.now(),
-  });
-
-  return serviceId;
+  return await ctx.db.insert("services", {
+      ...serviceData,
+      isActive: serviceData.isActive ?? true,
+      sortOrder: serviceData.sortOrder ?? 0,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    });
 }
 
 /**
@@ -138,7 +129,7 @@ export async function updateService(
   updates: Partial<ServiceData>
 ): Promise<void> {
   // Get existing service
-  const existingService = await ctx.db.get(serviceId as any);
+  const existingService = await ctx.db.get(serviceId);
   if (!existingService) {
     throw new Error("Service not found");
   }
@@ -156,26 +147,12 @@ export async function updateService(
   }
 
   // Prepare update data
-  const updateData: any = {
+  const updatePayload = {
+    ...updates,
     updatedAt: Date.now(),
   };
 
-  // Only update provided fields
-  if (updates.name !== undefined) updateData.name = updates.name;
-  if (updates.slug !== undefined) updateData.slug = updates.slug;
-  if (updates.title !== undefined) updateData.title = updates.title;
-  if (updates.description !== undefined) updateData.description = updates.description;
-  if (updates.metaDescription !== undefined) updateData.metaDescription = updates.metaDescription;
-  if (updates.features !== undefined) updateData.features = updates.features;
-  if (updates.benefits !== undefined) updateData.benefits = updates.benefits;
-  if (updates.price !== undefined) updateData.price = updates.price;
-  if (updates.duration !== undefined) updateData.duration = updates.duration;
-  if (updates.process !== undefined) updateData.process = updates.process;
-  if (updates.isActive !== undefined) updateData.isActive = updates.isActive;
-  if (updates.sortOrder !== undefined) updateData.sortOrder = updates.sortOrder;
-  if (updates.category !== undefined) updateData.category = updates.category;
-
-  await ctx.db.patch(serviceId as any, updateData);
+  await ctx.db.patch(serviceId, updatePayload);
 }
 
 /**
@@ -188,14 +165,14 @@ export async function deleteService(
   // Check if service has associated bookings
   const associatedBookings = await ctx.db
     .query("bookings")
-    .withIndex("by_serviceId", (q) => q.eq("serviceId", serviceId as any))
+    .withIndex("by_serviceId", (q) => q.eq("serviceId", serviceId))
     .take(1); // Just check if any exist
 
   if (associatedBookings.length > 0) {
     throw new Error("Cannot delete service with existing bookings. Set isActive to false instead.");
   }
 
-  await ctx.db.delete(serviceId as any);
+  await ctx.db.delete(serviceId);
 }
 
 /**
@@ -206,14 +183,14 @@ export async function toggleServiceStatus(
   serviceId: string
 ): Promise<{ serviceId: string; isActive: boolean }> {
   // Get existing service
-  const existingService = await ctx.db.get(serviceId as any);
+  const existingService = await ctx.db.get(serviceId);
   if (!existingService) {
     throw new Error("Service not found");
   }
 
   // Toggle status
   const newStatus = !existingService.isActive;
-  await ctx.db.patch(serviceId as any, {
+  await ctx.db.patch(serviceId, {
     isActive: newStatus,
     updatedAt: Date.now(),
   });
