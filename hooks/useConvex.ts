@@ -11,9 +11,10 @@ export function useBookings(filters?: {
   customerEmail?: string;
   limit?: number;
 }) {
+  const bookings = useQuery(api.bookings.getAllBookingsAdmin, filters || {});
   const [isLoading, setIsLoading] = useState(true);
-  
-  const { queryClient } = useConvex();
+
+  const convex = useConvex();
 
   useEffect(() => {
     if (bookings !== undefined) {
@@ -22,7 +23,7 @@ export function useBookings(filters?: {
   }, [bookings]);
 
   const refetch = () => {
-    queryClient.invalidateQueries();
+    convex.queryClient.invalidateQueries();
   };
 
   return {

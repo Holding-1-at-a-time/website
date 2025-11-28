@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useServices } from "@/hooks/useConvex";
 import { ArrowRight, CheckCircle, Clock, DollarSign, MapPin, Star } from "lucide-react";
 
@@ -133,11 +133,11 @@ export default function ServicesPage() {
                                 Comprehensive auto detailing services to keep your vehicle looking its best
                             </p>
                         </div>
-                        
+
                         {/* Primary Services Grid */}
                         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                             {primaryServices && primaryServices.length > 0 ? (
-                                primaryServices.map((service) => (
+                                primaryServices.map((service: any) => (
                                     <Card key={service._id} className="group hover:shadow-lg transition-shadow">
                                         <CardContent className="p-6">
                                             <div className="space-y-4">
@@ -145,9 +145,9 @@ export default function ServicesPage() {
                                                     <h3 className="text-xl font-semibold">{service.name}</h3>
                                                     <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">Premium</span>
                                                 </div>
-                                                
+
                                                 <p className="text-muted-foreground">{service.description}</p>
-                                                
+
                                                 <div className="flex items-center gap-4 text-sm">
                                                     <div className="flex items-center gap-1">
                                                         <DollarSign className="h-4 w-4 text-primary" />
@@ -162,7 +162,7 @@ export default function ServicesPage() {
                                                 <div className="space-y-2">
                                                     <p className="font-medium text-sm">What's Included:</p>
                                                     <ul className="text-sm text-muted-foreground space-y-1">
-                                                        {service.features.slice(0, 3).map((feature, idx) => (
+                                                        {service.features.slice(0, 3).map((feature: string, idx: number) => (
                                                             <li key={idx} className="flex items-center gap-2">
                                                                 <CheckCircle className="h-3 w-3 text-primary flex-shrink-0" />
                                                                 <span>{feature}</span>
@@ -206,7 +206,7 @@ export default function ServicesPage() {
                                 </p>
                             </div>
                             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                                {additionalServices.map((service) => (
+                                {additionalServices.map((service: any) => (
                                     <Card key={service._id} className="group hover:shadow-lg transition-shadow">
                                         <CardContent className="p-6">
                                             <div className="space-y-4">
@@ -214,9 +214,9 @@ export default function ServicesPage() {
                                                     <h3 className="text-xl font-semibold">{service.name}</h3>
                                                     <span className="text-xs bg-muted text-muted-foreground px-2 py-1 rounded-full">Additional</span>
                                                 </div>
-                                                
+
                                                 <p className="text-muted-foreground">{service.description}</p>
-                                                
+
                                                 <div className="flex items-center gap-4 text-sm">
                                                     <div className="flex items-center gap-1">
                                                         <DollarSign className="h-4 w-4 text-primary" />

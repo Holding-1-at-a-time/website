@@ -393,3 +393,5 @@ export const bookingDataValidator = v.object({
   )),
   notes: v.optional(v.string()),
 });
+
+export { BookingData };

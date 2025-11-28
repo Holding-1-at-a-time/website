@@ -115,7 +115,7 @@ export const getAllBookingsAdmin = query({
   handler: async (ctx, { status, limit }) => {
     await checkAdminAccess(ctx);
     return await getBookingsWithFilters(ctx, { 
-      status, 
+      status: status as "pending" | "confirmed" | "in_progress" | "completed" | "cancelled" | undefined, 
       limit: limit || 100 
     });
   },

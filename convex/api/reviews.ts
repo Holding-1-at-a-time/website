@@ -77,26 +77,26 @@ export const createReviewPublic = mutation({
     // Add basic rate limiting for review submissions
     const recentReviews = await ctx.db
       .query("reviews")
-      .filter((q) => 
+      .filter((q) =>
         q.eq(q.field("customerName"), reviewData.customerName)
       )
       .order("desc")
       .take(1);
-    
+
     if (recentReviews.length > 0) {
       const lastReview = recentReviews[0];
       const timeDiff = Date.now() - lastReview._creationTime;
       const oneDay = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
-      
+
       if (timeDiff < oneDay) {
         throw new Error("You can only submit one review per day. Please try again tomorrow.");
       }
     }
-    
+
     const reviewId = await createReview(ctx, reviewData as ReviewData);
-    return { 
-      reviewId, 
-      message: "Thank you for your review! It will be reviewed by our team before appearing on our website." 
+    return {
+      reviewId,
+      message: "Thank you for your review! It will be reviewed by our team before appearing on our website."
     };
   },
 });
@@ -111,12 +111,12 @@ export const getReviewByIdPublic = query({
     if (!review) {
       throw new Error("Review not found");
     }
-    
+
     // Only return approved reviews to public
-    if (!review.isApproved) {
+    if (!review || (typeof review === "object" && "isApproved" in review && !review.isApproved)) {
       throw new Error("Review not available");
     }
-    
+
     return review;
   },
 });
@@ -157,9 +157,9 @@ export const approveReviewAdmin = mutation({
   handler: async (ctx, { reviewId, isFeatured }) => {
     await checkAdminAccess(ctx);
     await approveReview(ctx, reviewId, isFeatured || false);
-    return { 
-      success: true, 
-      message: `Review approved${isFeatured ? " and featured" : ""} successfully` 
+    return {
+      success: true,
+      message: `Review approved${isFeatured ? " and featured" : ""} successfully`
     };
   },
 });
@@ -185,8 +185,8 @@ export const toggleFeaturedReviewAdmin = mutation({
   handler: async (ctx, { reviewId }) => {
     await checkAdminAccess(ctx);
     const result = await toggleFeaturedReview(ctx, reviewId);
-    return { 
-      success: true, 
+    return {
+      success: true,
       message: `Review ${result.isFeatured ? "featured" : "unfeatured"} successfully`,
       isFeatured: result.isFeatured
     };
@@ -204,12 +204,12 @@ export const updateReviewAdmin = mutation({
   },
   handler: async (ctx, { reviewId, updates }) => {
     await checkAdminAccess(ctx);
-    
+
     // Validate rating if provided
     if (updates.rating !== undefined && (updates.rating < 1 || updates.rating > 5)) {
       throw new Error("Rating must be between 1 and 5 stars");
     }
-    
+
     await updateReview(ctx, reviewId, updates);
     return { success: true, message: "Review updated successfully" };
   },
@@ -232,26 +232,26 @@ export const bulkApproveReviewsAdmin = mutation({
   },
   handler: async (ctx, { reviewIds, isFeatured }) => {
     await checkAdminAccess(ctx);
-    
+
     const results = [];
     for (const reviewId of reviewIds) {
       try {
         await approveReview(ctx, reviewId, isFeatured || false);
         results.push({ reviewId, success: true });
       } catch (error) {
-        results.push({ 
-          reviewId, 
-          success: false, 
-          error: error instanceof Error ? error.message : "Unknown error" 
+        results.push({
+          reviewId,
+          success: false,
+          error: error instanceof Error ? error.message : "Unknown error"
         });
       }
     }
-    
+
     const successCount = results.filter(r => r.success).length;
-    return { 
-      success: true, 
+    return {
+      success: true,
       message: `Approved ${successCount} of ${reviewIds.length} reviews`,
-      results 
+      results
     };
   },
 });
@@ -264,26 +264,26 @@ export const bulkRejectReviewsAdmin = mutation({
   },
   handler: async (ctx, { reviewIds, reason }) => {
     await checkAdminAccess(ctx);
-    
+
     const results = [];
     for (const reviewId of reviewIds) {
       try {
         await rejectReview(ctx, reviewId, reason);
         results.push({ reviewId, success: true });
       } catch (error) {
-        results.push({ 
-          reviewId, 
-          success: false, 
-          error: error instanceof Error ? error.message : "Unknown error" 
+        results.push({
+          reviewId,
+          success: false,
+          error: error instanceof Error ? error.message : "Unknown error"
         });
       }
     }
-    
+
     const successCount = results.filter(r => r.success).length;
-    return { 
-      success: true, 
+    return {
+      success: true,
       message: `Rejected ${successCount} of ${reviewIds.length} reviews`,
-      results 
+      results
     };
   },
 });
@@ -308,7 +308,7 @@ export const bulkFeatureReviewsAdmin = mutation({
   },
   handler: async (ctx, { reviewIds, isFeatured }) => {
     await checkAdminAccess(ctx);
-    
+
     const results = [];
     for (const reviewId of reviewIds) {
       try {
@@ -317,32 +317,32 @@ export const bulkFeatureReviewsAdmin = mutation({
           results.push({ reviewId, success: false, error: "Review not found" });
           continue;
         }
-        
-        if (!review.isApproved) {
+
+        if (!('isApproved' in review) || !review.isApproved) {
           results.push({ reviewId, success: false, error: "Review not approved" });
           continue;
         }
-        
+
         await ctx.db.patch(reviewId as any, {
           isFeatured: isFeatured,
           updatedAt: Date.now(),
         });
-        
+
         results.push({ reviewId, success: true });
       } catch (error) {
-        results.push({ 
-          reviewId, 
-          success: false, 
-          error: error instanceof Error ? error.message : "Unknown error" 
+        results.push({
+          reviewId,
+          success: false,
+          error: error instanceof Error ? error.message : "Unknown error"
         });
       }
     }
-    
+
     const successCount = results.filter(r => r.success).length;
-    return { 
-      success: true, 
+    return {
+      success: true,
       message: `${isFeatured ? "Featured" : "Unfeatured"} ${successCount} of ${reviewIds.length} reviews`,
-      results 
+      results
     };
   },
 });

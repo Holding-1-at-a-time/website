@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { useActiveServices, useAvailableTimeSlots, useFormValidation, useLoadingState, useErrorHandler } from "@/hooks/useConvex";
-import { CheckCircle, Clock, MapPin, Phone, Mail } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { useActiveServices, useAvailableTimeSlots, useBookings, useBookingStats, useErrorHandler, useFormValidation, useLoadingState, useServiceStats } from "@/hooks/useConvex";
+import { CheckCircle, Clock, Mail, MapPin, Phone } from "lucide-react";
+import React, { useState } from "react";
 import { toast } from "sonner";
 
 /**
@@ -36,7 +36,7 @@ export function ConvexBookingForm() {
     vehicleType: "",
     message: "",
   });
-  
+
   const [selectedService, setSelectedService] = useState<any>(null);
 
   // Convex hooks
@@ -45,7 +45,7 @@ export function ConvexBookingForm() {
     formData.preferredDate,
     formData.serviceId
   );
-  
+
   // Utility hooks
   const { errors, validateField, validateForm } = useFormValidation();
   const { withLoading } = useLoadingState();
@@ -54,13 +54,13 @@ export function ConvexBookingForm() {
   // Handle form field changes
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    
+
     // Validate field on change
     validateField(field, value);
-    
+
     // Handle service selection
-    if (field === "serviceId") {
-      const service = services.find(s => s._id === value);
+    if (field === "serviceId") { // Parameter 's' implicitly has an 'any' type.
+      const service = services.find((s: { _id: string; }) => s._id === value);
       setSelectedService(service || null);
       // Clear time slots when service changes
       if (field === "serviceId") {
@@ -72,7 +72,7 @@ export function ConvexBookingForm() {
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validate form
     if (!validateForm(formData)) {
       toast.error("Please fix the errors in the form");
@@ -174,7 +174,7 @@ export function ConvexBookingForm() {
         {/* Customer Information */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Contact Information</h3>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="customerName">Full Name *</Label>
@@ -246,7 +246,7 @@ export function ConvexBookingForm() {
         {/* Service Selection */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Service Selection</h3>
-          
+
           <div className="space-y-2">
             <Label htmlFor="serviceId">Select Service *</Label>
             <select
@@ -257,7 +257,7 @@ export function ConvexBookingForm() {
               required
             >
               <option value="">Choose a service...</option>
-              {services.map((service) => (
+              {services.map((service: { _id: string; name: string; price: string; duration: string; }) => (
                 <option key={service._id} value={service._id}>
                   {service.name} - {service.price} ({service.duration})
                 </option>
@@ -289,7 +289,7 @@ export function ConvexBookingForm() {
         {/* Date and Time Selection */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Scheduling</h3>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="preferredDate">Preferred Date *</Label>
@@ -324,7 +324,7 @@ export function ConvexBookingForm() {
                     required
                   >
                     <option value="">Select time...</option>
-                    {availableSlots?.map((slot) => (
+                    {availableSlots?.map((slot: string) => (
                       <option key={slot} value={slot}>
                         {slot}
                       </option>
@@ -359,9 +359,9 @@ export function ConvexBookingForm() {
         </div>
 
         {/* Submit Button */}
-        <Button 
-          type="submit" 
-          size="lg" 
+        <Button
+          type="submit"
+          size="lg"
           className="w-full"
           disabled={Object.keys(errors).length > 0}
         >
@@ -447,7 +447,7 @@ export function AdminDashboard() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {bookings.slice(0, 10).map((booking) => (
+                {bookings.slice(0, 10).map((booking: { _id: React.Key | null | undefined; customerName: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined; serviceId: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined; preferredDate: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined; preferredTime: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined; status: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined; customerPhone: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined; }) => (
                   <tr key={booking._id}>
                     <td className="px-4 py-2 text-sm">{booking.customerName}</td>
                     <td className="px-4 py-2 text-sm">{booking.serviceId}</td>
@@ -455,11 +455,10 @@ export function AdminDashboard() {
                       {booking.preferredDate} at {booking.preferredTime}
                     </td>
                     <td className="px-4 py-2 text-sm">
-                      <span className={`px-2 py-1 rounded-full text-xs ${
-                        booking.status === "confirmed" ? "bg-green-100 text-green-800" :
+                      <span className={`px-2 py-1 rounded-full text-xs ${booking.status === "confirmed" ? "bg-green-100 text-green-800" :
                         booking.status === "pending" ? "bg-yellow-100 text-yellow-800" :
-                        "bg-gray-100 text-gray-800"
-                      }`}>
+                          "bg-gray-100 text-gray-800"
+                        }`}>
                         {booking.status}
                       </span>
                     </td>

@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default function ServicePage({ params }: PageProps) {
   const { slug } = params;
   const { service, isLoading } = useServiceBySlug(slug);
-  
+
   // Show loading state
   if (isLoading) {
     return (
@@ -181,8 +181,8 @@ export default function ServicePage({ params }: PageProps) {
           <div className="container">
             <h2 className="text-3xl font-bold mb-8">What's Included</h2>
             <div className="grid gap-4 md:grid-cols-2">
-              {service.features.map((feature: string, idx) => (
-                <Card key={idx}>
+              {service.features.map((feature: string, idx: number) => (
+                <Card key={feature}>
                   <CardContent className="flex items-start gap-4 p-6">
                     <CheckCircle className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
                     <p>{feature}</p>
@@ -199,8 +199,8 @@ export default function ServicePage({ params }: PageProps) {
             <div className="container">
               <h2 className="text-3xl font-bold mb-8">Why Choose Our {service.name}?</h2>
               <div className="grid gap-6 md:grid-cols-3">
-                {service.benefits.map((benefit, idx) => (
-                  <Card key={idx}>
+                {service.benefits.map((benefit: string) => (
+                  <Card key={benefit}>
                     <CardContent className="p-6">
                       <CheckCircle className="h-8 w-8 text-primary mb-4" />
                       <p className="font-medium">{benefit}</p>
@@ -218,7 +218,7 @@ export default function ServicePage({ params }: PageProps) {
             <div className="container">
               <h2 className="text-3xl font-bold mb-8 text-center">Our Process</h2>
               <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-                {service.process.map((step) => (
+                {service.process.map((step: { step: string; title: string; description: string }) => (
                   <div key={step.step} className="relative">
                     <div className="flex flex-col items-center text-center space-y-4">
                       <div className="w-16 h-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold">
