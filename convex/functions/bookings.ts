@@ -100,11 +100,9 @@ export const getBookings = query(async (ctx, filters: any = {}) => {
     }
 
     // Order by creation date (most recent first)
-    const bookings = await query
-      .order("desc")
-      .take(filters.limit || 50);
-
-    return bookings;
+    return await query
+          .order("desc")
+          .take(filters.limit || 50);
   } catch (error) {
     throw new ConvexError(handleConvexError(error));
   }
@@ -119,13 +117,11 @@ export const getBookingsByDate = query(async (ctx, { date }: { date: string }) =
       throw new ConvexError("Authentication required");
     }
 
-    const bookings = await ctx.db
-      .query("bookings")
-      .filter((q: any) => q.eq(q.field("preferredDate"), date))
-      .order("asc")
-      .collect();
-
-    return bookings;
+    return await ctx.db
+          .query("bookings")
+          .filter((q: any) => q.eq(q.field("preferredDate"), date))
+          .order("asc")
+          .collect();
   } catch (error) {
     throw new ConvexError(handleConvexError(error));
   }
@@ -144,13 +140,11 @@ export const getBookingsByStatus = query(async (ctx, {
       throw new ConvexError("Only admins can view bookings by status");
     }
 
-    const bookings = await ctx.db
-      .query("bookings")
-      .filter((q: any) => q.eq(q.field("status"), status))
-      .order("desc")
-      .take(20);
-
-    return bookings;
+    return await ctx.db
+          .query("bookings")
+          .filter((q: any) => q.eq(q.field("status"), status))
+          .order("desc")
+          .take(20);
   } catch (error) {
     throw new ConvexError(handleConvexError(error));
   }
@@ -169,10 +163,8 @@ export const getBooking = query(async (ctx, { bookingId }: { bookingId: string }
     // Allow access if:
     // 1. Admin user
     // 2. Customer viewing their own booking (by email)
-    if (!user || user.role !== "admin") {
-      if (!user || user.email !== booking.customerEmail) {
-        throw new ConvexError("Access denied");
-      }
+    if ((!user || user.role !== "admin") && (!user || user.email !== booking.customerEmail)) {
+          throw new ConvexError("Access denied");
     }
 
     return booking;
@@ -452,19 +444,15 @@ export const getCustomerBookingHistory = query(async (ctx, {
     // Allow access if:
     // 1. Admin user
     // 2. Customer viewing their own history
-    if (!user || user.role !== "admin") {
-      if (!user || user.email !== email) {
-        throw new ConvexError("Access denied");
-      }
+    if ((!user || user.role !== "admin") && (!user || user.email !== email)) {
+          throw new ConvexError("Access denied");
     }
 
-    const bookings = await ctx.db
-      .query("bookings")
-      .filter((q: any) => q.eq(q.field("customerEmail"), email))
-      .order("desc")
-      .collect();
-
-    return bookings;
+    return await ctx.db
+          .query("bookings")
+          .filter((q: any) => q.eq(q.field("customerEmail"), email))
+          .order("desc")
+          .collect();
   } catch (error) {
     throw new ConvexError(handleConvexError(error));
   }

@@ -14,7 +14,7 @@ export function useBookings(filters?: {
   const bookings = useQuery(api.bookings.getAllBookingsAdmin, filters || {});
   const [isLoading, setIsLoading] = useState(true);
 
-  const convex = useConvex();
+  const { query } = useConvex();
 
   useEffect(() => {
     if (bookings !== undefined) {
@@ -23,7 +23,7 @@ export function useBookings(filters?: {
   }, [bookings]);
 
   const refetch = () => {
-    convex.query.useQuery;()();
+    query.invalidateQueries();
   };
 
   return {
@@ -81,7 +81,7 @@ export function useServices(filters?: {
   limit?: number;
 }) {
   const [isLoading, setIsLoading] = useState(true);
-  
+
   const services = useQuery(api.services.getServices, filters || {});
   const { query } = useConvex();
 
@@ -124,13 +124,13 @@ export function useServiceStats() {
 // Real-time booking updates
 export function useRealTimeBookings(date?: string) {
   const { query } = useConvex();
-  
+
   // Subscribe to booking updates (this would be implemented with Convex subscriptions)
   useEffect(() => {
     // In a real implementation, this would set up a subscription
     // For now, we'll just useQuery; queries periodically
     const interval = setInterval(() => {
-      query.useQuery;()();
+      query.useQuery; ()();
     }, 5000); // Refresh every 5 seconds
 
     return () => clearInterval(interval);
@@ -159,7 +159,7 @@ export function useFormValidation() {
           delete newErrors[name];
         }
         break;
-      
+
       case "customerEmail":
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!value || !emailRegex.test(value)) {
@@ -168,7 +168,7 @@ export function useFormValidation() {
           delete newErrors[name];
         }
         break;
-      
+
       case "customerPhone":
         const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
         const cleanPhone = value.replace(/[\D]/g, '');
@@ -178,7 +178,7 @@ export function useFormValidation() {
           delete newErrors[name];
         }
         break;
-      
+
       case "preferredDate":
         const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
         if (!value || !dateRegex.test(value)) {
@@ -194,7 +194,7 @@ export function useFormValidation() {
           }
         }
         break;
-      
+
       case "preferredTime":
         const timeRegex = /^\d{1,2}:\d{2}\s?(AM|PM)$/i;
         if (!value || !timeRegex.test(value)) {
@@ -203,7 +203,7 @@ export function useFormValidation() {
           delete newErrors[name];
         }
         break;
-      
+
       default:
         break;
     }
@@ -215,7 +215,7 @@ export function useFormValidation() {
   const validateForm = (formData: Record<string, any>) => {
     let isValid = true;
     const requiredFields = ["customerName", "customerEmail", "customerPhone", "preferredDate", "preferredTime"];
-    
+
     for (const field of requiredFields) {
       if (!validateField(field, formData[field])) {
         isValid = false;
@@ -262,7 +262,7 @@ export function useErrorHandler() {
 
   const handleError = (error: unknown) => {
     console.error("Convex Error:", error);
-    
+
     if (error instanceof Error) {
       setError(error.message);
     } else if (typeof error === "string") {
@@ -321,7 +321,7 @@ export function useNotifications() {
       id,
       timestamp: Date.now(),
     };
-    
+
     setNotifications(prev => [newNotification, ...prev]);
 
     // Auto-remove after 5 seconds
