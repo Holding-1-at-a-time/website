@@ -57,7 +57,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // LocalBusiness Schema for site-wide SEO
+  // Server-side LocalBusiness Schema for site-wide SEO
   const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
@@ -69,7 +69,7 @@ export default function RootLayout({
     "image": "https://1detailatatime.com/logo.png",
     "description": "IDA certified auto detailing studio in San Antonio, TX. Expert car care, paint protection, and interior cleaning services. Serving Stone Oak, Alamo Heights, North Side and all SA areas.",
     "telephone": "(726) 207-1007",
-    "email": "rromerojr1@gmail.com",
+    "email": process.env.BUSINESS_EMAIL || '', // Server-side only - secure email handling
     "priceRange": "$39-$399+",
     "address": {
       "@type": "PostalAddress",

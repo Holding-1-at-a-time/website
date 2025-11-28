@@ -23,7 +23,7 @@ export function useBookings(filters?: {
   }, [bookings]);
 
   const refetch = () => {
-    convex.queryClient.invalidateQueries();
+    convex.query.useQuery;()();
   };
 
   return {
@@ -83,7 +83,7 @@ export function useServices(filters?: {
   const [isLoading, setIsLoading] = useState(true);
   
   const services = useQuery(api.services.getServices, filters || {});
-  const { queryClient } = useConvex();
+  const { query } = useConvex();
 
   useEffect(() => {
     if (services !== undefined) {
@@ -94,7 +94,7 @@ export function useServices(filters?: {
   return {
     services: services || [],
     isLoading,
-    refetch: () => queryClient.invalidateQueries(),
+    refetch: () => query.useQuery;()(),
   };
 }
 
@@ -123,18 +123,18 @@ export function useServiceStats() {
 
 // Real-time booking updates
 export function useRealTimeBookings(date?: string) {
-  const { queryClient } = useConvex();
+  const { query } = useConvex();
   
   // Subscribe to booking updates (this would be implemented with Convex subscriptions)
   useEffect(() => {
     // In a real implementation, this would set up a subscription
-    // For now, we'll just invalidate queries periodically
+    // For now, we'll just useQuery; queries periodically
     const interval = setInterval(() => {
-      queryClient.invalidateQueries();
+      query.useQuery;()();
     }, 5000); // Refresh every 5 seconds
 
     return () => clearInterval(interval);
-  }, [queryClient]);
+  }, [query]);
 
   return useBookings(date ? { date } : {});
 }

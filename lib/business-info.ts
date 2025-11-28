@@ -4,12 +4,21 @@
  * to ensure NAP consistency across the entire website
  */
 
+// Server-side business information - never exposed to client bundle
+const getBusinessEmail = (): string => {
+  // Only available server-side, will be undefined in client bundle
+  if (typeof window !== 'undefined') {
+    return ''; // Empty string for client-side to prevent exposure
+  }
+  return process.env.BUSINESS_EMAIL || '';
+};
+
 export const BUSINESS_INFO = {
   // Core Business Information
   name: "One Detail At A Time",
   legalName: "One Detail At A Time LLC",
   phone: "(726) 207-1007",
-  email: "rromerojr1@gmail.com",
+  email: getBusinessEmail(),
   
   // Address Information
   address: {

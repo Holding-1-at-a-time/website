@@ -18,16 +18,15 @@ import {
 // Create new booking (Guest access with rate limiting)
 export const createBooking = mutation(async (ctx, bookingData: any) => {
   try {
-    // Apply rate limiting for guest access
-    const clientIp = ctx.headers.get("x-forwarded-for") || ctx.headers.get("x-real-ip") || "unknown";
-    const rateLimitKey = `guest_booking_${clientIp}`;
-    
-    if (!rateLimit(rateLimitKey, 5, 60 * 60 * 1000)) { // 5 bookings per hour per IP
-      throw new ConvexError("Too many booking attempts. Please try again later.");
-    }
-
     // Sanitize and validate booking data
     const sanitizedData = sanitizeAndValidateBooking(bookingData);
+
+    // Apply rate limiting for guest access, now based on email
+    const rateLimitKey = `guest_booking_${sanitizedData.customerEmail}`;
+    
+    if (!rateLimit(rateLimitKey, 5, 60 * 60 * 1000)) { // 5 bookings per hour per email
+      throw new ConvexError("Too many booking attempts with this email. Please try again later.");
+    }
 
     // Verify service exists and is active
     const service = await ctx.db.get(sanitizedData.serviceId as any);

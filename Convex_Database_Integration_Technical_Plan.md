@@ -273,7 +273,7 @@ export function ConvexClientProvider({ children }: { children: ReactNode }) {
 **Custom Hooks for Data Management**:
 ```typescript
 // hooks/useBookings.ts
-import { useQuery, useMutation, useQueryClient } from "convex/react";
+import { useQuery, useMutation, usequery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useState, useEffect } from "react";
 
@@ -285,7 +285,7 @@ export function useBookings(filters?: {
   const [isLoading, setIsLoading] = useState(true);
   
   const bookings = useQuery(api.bookings.getBookings, filters || {});
-  const queryClient = useQueryClient();
+  const query = usequery();
 
   useEffect(() => {
     if (bookings !== undefined) {
@@ -296,7 +296,7 @@ export function useBookings(filters?: {
   return {
     bookings: bookings || [],
     isLoading,
-    refetch: queryClient.invalidateQueries,
+    refetch: query.useQuery;(),
   };
 }
 
@@ -313,11 +313,11 @@ export function useBookingMutations() {
 ```typescript
 // hooks/useRealTimeBookings.ts
 import { useEffect } from "react";
-import { useQuery, useQueryClient } from "convex/react";
+import { useQuery, usequery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 
 export function useRealTimeBookings(date: string) {
-  const queryClient = useQueryClient();
+  const query = usequery();
   
   // Get initial data
   const bookings = useQuery(api.bookings.getBookingsByDate, { date });
@@ -328,11 +328,11 @@ export function useRealTimeBookings(date: string) {
       .watch({}, { date })
       .onUpdate(() => {
         // Automatically refresh data on updates
-        queryClient.invalidateQueries();
+        query.useQuery;()();
       });
 
     return () => unsubscribe();
-  }, [date, queryClient]);
+  }, [date, query]);
 
   return bookings || [];
 }
@@ -797,7 +797,7 @@ export const subscribeBookings = Query(
 "use client";
 
 import { useEffect, useState } from "react";
-import { useQueryClient } from "convex/react";
+import { usequery } from "convex/react";
 
 export function useRealTimeUpdates<T>(
   subscriptionFunction: any,
@@ -805,7 +805,7 @@ export function useRealTimeUpdates<T>(
   updateCallback: (data: T[]) => void
 ) {
   const [isConnected, setIsConnected] = useState(false);
-  const queryClient = useQueryClient();
+  const query = usequery();
 
   useEffect(() => {
     setIsConnected(true);
@@ -815,14 +815,14 @@ export function useRealTimeUpdates<T>(
       .watch({}, filters)
       .onUpdate(() => {
         // Refresh queries when data changes
-        queryClient.invalidateQueries();
+        query.useQuery;()();
       });
 
     return () => {
       setIsConnected(false);
       unsubscribe();
     };
-  }, [subscriptionFunction, filters, queryClient]);
+  }, [subscriptionFunction, filters, query]);
 
   return { isConnected };
 }
