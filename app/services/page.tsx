@@ -1,23 +1,10 @@
-import type { Metadata } from "next";
+'use client';
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useServices } from "@/hooks/useConvex";
 import { ArrowRight, CheckCircle, Clock, DollarSign, MapPin, Star } from "lucide-react";
-
-export const metadata: Metadata = {
-    title: "Professional Auto Detailing Services in San Antonio, TX | One Detail At A Time",
-    description: "Premium auto detailing services in San Antonio, TX. Expert car washing, waxing, paint correction & interior cleaning. Serving Stone Oak, Alamo Heights, North Side & all SA areas. IDA certified & insured.",
-    openGraph: {
-        title: "Professional Auto Detailing Services in San Antonio, TX | One Detail At A Time",
-        description: "Premium auto detailing services in San Antonio, TX. Expert car washing, waxing, paint correction & interior cleaning.",
-        type: "website",
-        url: "https://1detailatatime.com/services",
-    },
-    alternates: {
-        canonical: "https://1detailatatime.com/services",
-    },
-};
 
 export default function ServicesPage() {
     // Fetch services from Convex backend

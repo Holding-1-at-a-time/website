@@ -1,0 +1,21 @@
+
+> website@2.0.0 dev C:\Users\rrome\website
+> next dev
+
+   ▲ Next.js 16.0.5 (Turbopack)
+   - Local:         http://localhost:3000
+   - Network:       http://172.25.80.1:3000
+   - Environments: .env.local
+   - Experiments (use with caution):
+     ✓ optimizeCss
+     · optimizePackageImports
+
+ ✓ Starting...
+ ✓ Ready in 1855ms
+ ○ Compiling / ...
+ GET / 200 in 5.9s (compile: 4.0s, render: 1933ms)
+Image with src "/_next/static/media/One Detail At A Time LLC Pro & Private Auto Detailing Studio.d5d40d53.jpg" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/_next/static/media/One Detail At A Time LLC Pro & Private Auto Detailing Studio.d5d40d53.jpg" has legacy prop "objectFit". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+ GET /about 200 in 1086ms (compile: 757ms, render: 330ms)

@@ -42,8 +42,7 @@ export function useBookingMutations() {
   const handleCreateBooking = async (bookingData: any) => {
     setIsSubmitting(true);
     try {
-      const bookingId = await createBooking(bookingData);
-      return bookingId;
+      return await createBooking(bookingData);
     } finally {
       setIsSubmitting(false);
     }
@@ -244,8 +243,7 @@ export function useLoadingState() {
   const withLoading = async <T>(promise: Promise<T>): Promise<T> => {
     setGlobalLoading(true);
     try {
-      const result = await promise;
-      return result;
+      return await promise;
     } finally {
       setGlobalLoading(false);
     }
