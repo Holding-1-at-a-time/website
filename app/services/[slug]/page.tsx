@@ -181,7 +181,7 @@ export default function ServicePage({ params }: PageProps) {
           <div className="container">
             <h2 className="text-3xl font-bold mb-8">What's Included</h2>
             <div className="grid gap-4 md:grid-cols-2">
-              {service.features.map((feature, idx) => (
+              {service.features.map((feature: string, idx) => (
                 <Card key={idx}>
                   <CardContent className="flex items-start gap-4 p-6">
                     <CheckCircle className="h-6 w-6 text-primary flex-shrink-0 mt-1" />

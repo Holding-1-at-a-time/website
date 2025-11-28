@@ -1,4 +1,5 @@
-import { useQuery, useMutation, useQueryClient } from "convex/react";
+"use client";
+import { useQuery, useMutation, useConvex } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useState, useEffect } from "react";
 
@@ -12,8 +13,7 @@ export function useBookings(filters?: {
 }) {
   const [isLoading, setIsLoading] = useState(true);
   
-  const bookings = useQuery(api.bookings.getBookings, filters || {});
-  const queryClient = useQueryClient();
+  const { queryClient } = useConvex();
 
   useEffect(() => {
     if (bookings !== undefined) {
@@ -83,7 +83,7 @@ export function useServices(filters?: {
   const [isLoading, setIsLoading] = useState(true);
   
   const services = useQuery(api.services.getServices, filters || {});
-  const queryClient = useQueryClient();
+  const { queryClient } = useConvex();
 
   useEffect(() => {
     if (services !== undefined) {
@@ -123,7 +123,7 @@ export function useServiceStats() {
 
 // Real-time booking updates
 export function useRealTimeBookings(date?: string) {
-  const queryClient = useQueryClient();
+  const { queryClient } = useConvex();
   
   // Subscribe to booking updates (this would be implemented with Convex subscriptions)
   useEffect(() => {

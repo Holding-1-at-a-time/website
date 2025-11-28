@@ -104,6 +104,11 @@ export async function getTodaysBookings(ctx: QueryCtx): Promise<BookingData[]> {
  * Check for booking conflicts (same date and time)
  */
 export async function checkBookingConflict(
+  ctx: QueryCtx,
+  date: string,
+  time: string,
+  excludeBookingId?: string
+): Promise<boolean> {
   const conflictingBookings = await ctx.db
     .query("bookings")
     .withIndex("by_date", (q) => q.eq("preferredDate", date))
@@ -115,11 +120,6 @@ export async function checkBookingConflict(
     b._id !== excludeBookingId && 
     !["cancelled", "completed"].includes(b.status)
   );
-  
-  return activeConflicts.length > 0;
-  const activeConflicts = excludeBookingId
-    ? conflictingBookings.filter(b => b._id !== excludeBookingId)
-    : conflictingBookings;
   
   return activeConflicts.length > 0;
 }
@@ -207,6 +207,12 @@ export async function updateBooking(
   
   // If updating serviceId, validate the service exists
   if (updates.serviceId && updates.serviceId !== existingBooking.serviceId) {
+    const service = await ctx.db.get(updates.serviceId);
+    if (!service) {
+      throw new Error("Selected service not found");
+    }
+  }
+  
   // Spread updates first, then apply server-controlled timestamps
   const updateData: BookingUpdateData = {
     ...updates,
@@ -215,12 +221,6 @@ export async function updateBooking(
     ...(updates.status === "completed" && { completedAt: Date.now() }),
     ...(updates.status === "cancelled" && { cancelledAt: Date.now() }),
   };
-    updateData.confirmedAt = Date.now();
-  } else if (updates.status === "completed") {
-    updateData.completedAt = Date.now();
-  } else if (updates.status === "cancelled") {
-    updateData.cancelledAt = Date.now();
-  }
   
   await ctx.db.patch(bookingId, updateData);
   
@@ -264,6 +264,33 @@ export async function cancelBooking(
 }
 
 /**
+ * Get available time slots for a given date
+ */
+export async function getAvailableTimeSlots(
+  ctx: QueryCtx,
+  date: string,
+  _serviceId?: string // Mark unused or implement service-specific logic
+): Promise<string[]> {
+  // Get existing bookings for the date
+  const existingBookings = await ctx.db
+    .query("bookings")
+    .withIndex("by_date", (q) => q.eq("preferredDate", date))
+    .filter((q) => q.neq(q.field("status"), "cancelled"))
+    .take(100);
+  
+  const bookedTimes = existingBookings.map(b => b.preferredTime);
+  
+  // Define business hours (9 AM to 6 PM)
+  const businessHours = [
+    "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM",
+    "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM"
+  ];
+  
+  // Return available slots (not booked)
+  return businessHours.filter(time => !bookedTimes.includes(time));
+}
+
+/**
  * Get booking statistics for admin dashboard
  */
 export async function getBookingStats(ctx: QueryCtx) {
@@ -291,35 +318,9 @@ export async function getBookingStats(ctx: QueryCtx) {
     in_progress: statusCounts.in_progress,
     completed: statusCounts.completed,
     cancelled: statusCounts.cancelled,
-export async function getAvailableTimeSlots(
-  ctx: QueryCtx,
-  date: string,
-  _serviceId?: string // Mark unused or implement service-specific logic
-): Promise<string[]> {
-  // Get existing bookings for the date
-  const existingBookings = await ctx.db
-    .query("bookings")
-    .withIndex("by_date", (q) => q.eq("preferredDate", date))
-    .filter((q) => q.neq(q.field("status"), "cancelled"))
-    .take(100);
-  
-  const bookedTimes = existingBookings.map(b => b.preferredTime);
-  
-  // Define business hours (9 AM to 6 PM)
-  const businessHours = [
-    "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM",
-    "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM"
-  ];
-  
-  // Return available slots (not booked)
-  return businessHours.filter(time => !bookedTimes.includes(time));
+  };
 }
-    "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM"
-  ];
-  
-  // Return available slots (not booked)
-  return businessHours.filter(time => !bookedTimes.includes(time));
-}
+
 /**
  * Check if user has access to admin functions
  */
@@ -392,4 +393,3 @@ export const bookingDataValidator = v.object({
   )),
   notes: v.optional(v.string()),
 });
-

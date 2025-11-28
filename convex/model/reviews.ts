@@ -53,15 +53,16 @@ export async function getReviewsByService(
     .query("reviews")
     .withIndex("by_service", (q) => q.eq("serviceId", serviceId));
   
-  const query = ctx.db
-    .query("reviews")
-    .withIndex("by_service", (q) => q.eq("serviceId", serviceId));
-  
   const filteredQuery = approvedOnly
     ? query.filter((q) => q.eq(q.field("isApproved"), true))
     : query;
   
   return await filteredQuery.order("desc").take(limit);
+}
+
+/**
+ * Get all reviews for admin view
+ */
 export async function getAllReviews(ctx: QueryCtx, limit: number = 100) {
   return await ctx.db
       .query("reviews")
