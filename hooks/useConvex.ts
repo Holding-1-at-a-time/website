@@ -94,7 +94,7 @@ export function useServices(filters?: {
   return {
     services: services || [],
     isLoading,
-    refetch: () => query.useQuery;()(),
+    refetch: () => window.location.reload(),
   };
 }
 
@@ -130,7 +130,8 @@ export function useRealTimeBookings(date?: string) {
     // In a real implementation, this would set up a subscription
     // For now, we'll just useQuery; queries periodically
     const interval = setInterval(() => {
-      query.useQuery; ()();
+      // Trigger a re-render for real-time updates
+      window.location.reload();
     }, 5000); // Refresh every 5 seconds
 
     return () => clearInterval(interval);
