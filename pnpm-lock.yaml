@@ -39,8 +39,8 @@ importers:
         specifier: ^1.29.3
         version: 1.29.3(react@19.2.0)
       critters:
-        specifier: ^0.0.20
-        version: 0.0.20
+        specifier: ^0.0.25
+        version: 0.0.25
       embla-carousel-react:
         specifier: ^8.6.0
         version: 8.6.0(react@19.2.0)
@@ -2537,9 +2537,9 @@ packages:
       typescript:
         optional: true
 
-  critters@0.0.19:
-    resolution: {integrity: sha512-Fm4ZAXsG0VzWy1U30rP4qxbaWGSsqXDgSupJW1OUJGDAs0KWC+j37v7p5a2kZ9BPJvhRzWm3be+Hc9WvQOBUOw==}
-    deprecated: Please upgrade to the latest version. There is a potential XSS vulnerability in this version
+  critters@0.0.25:
+    resolution: {integrity: sha512-ROF/tjJyyRdM8/6W0VqoN5Ql05xAGnkf5b7f3sTEl1bI5jTQQf8O918RD/V9tEb9pRY/TKcvJekDbJtniHyPtQ==}
+    deprecated: Ownership of Critters has moved to the Nuxt team, who will be maintaining the project going forward. If you'd like to keep using Critters, please switch to the actively-maintained fork at https://github.com/danielroe/beasties
 
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
@@ -3596,6 +3596,7 @@ packages:
   next@16.0.5:
     resolution: {integrity: sha512-XUPsFqSqu/NDdPfn/cju9yfIedkDI7ytDoALD9todaSMxk1Z5e3WcbUjfI9xsanFTys7xz62lnRWNFqJordzkQ==}
     engines: {node: '>=20.9.0'}
+    deprecated: This version has a security vulnerability. Please upgrade to a patched version. See https://nextjs.org/blog/CVE-2025-66478 for more details.
     hasBin: true
     peerDependencies:
       '@opentelemetry/api': ^1.1.0
@@ -3773,6 +3774,9 @@ packages:
     resolution: {integrity: sha512-/+5VFTchJDoVj3bhoqi6UeymcD00DAwb1nJwamzPvHEszJ4FpF6SNNbUbOS8yI56qHzdV8eK0qEfOSiodkTdxg==}
     engines: {node: '>= 0.4'}
 
+  postcss-media-query-parser@0.2.3:
+    resolution: {integrity: sha512-3sOlxmbKcSHMjlUXQZKQ06jOswE7oVkXPxmZdoB1r5l0q6gTFTQSHxNxOrCccElbW7dxNytifNEo8qidX2Vsig==}
+
   postcss@8.4.31:
     resolution: {integrity: sha512-PS08Iboia9mts/2ygV3eLpY5ghnUcfLV/EXTOW1E2qYxJKGGBUtNjN76FYHnMs36RmARn41bC0AZmn+rR0OVpQ==}
     engines: {node: ^10 || ^12 || >=14}
@@ -3789,10 +3793,6 @@ packages:
     resolution: {integrity: sha512-RWKXE4qB3u5Z6yz7omJkjWwmTfLdcbv44jUVHC5NpfXwFGzvpQM798FGv/6WNK879tc+Cn0AAyherCl1KjbyZQ==}
     engines: {node: '>=14'}
     hasBin: true
-
-  pretty-bytes@5.6.0:
-    resolution: {integrity: sha512-FFw039TmrBqFK8ma/7OL3sDz/VytdtJr044/QUJtH0wK9lb9jLq9tJyIxUwtQJHwar2BqtiA4iCWSwo9JLkzFg==}
-    engines: {node: '>=6'}
 
   pretty-ms@9.3.0:
     resolution: {integrity: sha512-gjVS5hOP+M3wMm5nmNOucbIrqudzs9v/57bWRHQWLYklXqoXKrVfYW2W9+glfGsqtPgpiz5WwyEEB+ksXIx3gQ==}
@@ -5970,7 +5970,7 @@ snapshots:
       typescript:
         optional: true
 
-  critters@0.0.20:
+  critters@0.0.25:
     dependencies:
       chalk: 4.1.2
       css-select: 5.2.2
@@ -5978,7 +5978,7 @@ snapshots:
       domhandler: 5.0.3
       htmlparser2: 8.0.2
       postcss: 8.5.6
-      pretty-bytes: 5.6.0
+      postcss-media-query-parser: 0.2.3
 
   croner@9.1.0: {}
 
@@ -8342,6 +8342,8 @@ snapshots:
 
   postcss-value-parser@4.2.0: {}
 
+  postcss-media-query-parser@0.2.3: {}
+
   postcss@8.4.31:
     dependencies:
       nanoid: 3.3.11
@@ -8357,10 +8359,6 @@ snapshots:
   prelude-ls@1.2.1: {}
 
   prettier@3.7.1: {}
-
-  pretty-bytes@5.6.0: {}
-
-  pretty-bytes@7.1.0: {}
 
   pretty-ms@9.3.0:
     dependencies:
